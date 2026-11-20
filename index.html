@@ -287,7 +287,7 @@
     <button id="go"></button>
     <div class="err" id="err"></div>
   </div>
-  <div class="foot">ALGONOVA · INTERNAL ANALYTICS · BUILD V6</div>
+  <div class="foot">ALGONOVA · INTERNAL ANALYTICS · BUILD V8</div>
 </div>
 
 <div id="app" hidden>
@@ -313,8 +313,7 @@
 
   <div class="zone" id="z1"></div>
   <div class="kpis">
-    <div class="kpi"><span class="lbl" id="l_k1"></span><b id="k1">—</b><em id="d1"></em>
-      <div class="pbar" id="pb1"></div><div class="spark" id="sp1"></div></div>
+    <div class="kpi"><span class="lbl" id="l_k1"></span><b id="k1">—</b><em id="d1"></em></div>
     <div class="kpi"><span class="lbl">TCM</span><b id="k2">—</b><em id="d2"></em><span class="xtra" id="x2"></span></div>
     <div class="kpi"><span class="lbl">ISM</span><b id="k3">—</b><em id="d3"></em><span class="xtra" id="x3"></span></div>
     <div class="kpi"><span class="lbl" id="l_k4"></span><b id="k4">—</b><em id="d4"></em><span class="xtra" id="x4"></span></div>
@@ -392,13 +391,13 @@ const SHEET_ID  = "1HPiMyBAWp69hKlZCfi_ZkzFPoqHKB7Ne1xNXFazdibc";
 const SHEET_TAB = "DASH_export";
 const CSV_URL   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXE0WM3nHC1Cj16H7HqSRqEVSBHV9E9FUdHngVXXff8GuDzJUhL8iBqPBaUSeupMrT5IIu9thGVa22/pub?gid=798141948&single=true&output=csv";
 const PASSWORD  = "indonesia2026";
-const BUILD     = "build v6 · 20.11.2026";
+const BUILD     = "build v8 · 20.11.2026";
 
 /* ============ дальше ничего менять не нужно ============ */
 
 const UI = {
  en:{hint:"Enter password",ok:"Log in",wrong:"Wrong password",loading:"Loading…",upd:"Updated:",
-  z1:"Month summary",mz6:"Hiring by month",mcap:"Plan vs fact, all roles",mism:"ISM and BM",mlead:"Since January: hired {f} against a plan of {p}",mpart:"* The month is still in progress.",mnfc:"Left bar — plan from the Hiring plan tab, right bar — hires from the Candidates tab, all roles. Under the month — plan achievement.",kAll:"Hired this month",kAllY:"Hired since January",ofp:"{p} planned",kTut:"Tutors",fcl:"month-end forecast: ",np:"no plan",z1y:"Year summary",z2:"Recruitment funnels",z3:"Hiring by role",z5:"Cost per hire",z6:"TCM forecast",
+  z1:"Month summary",mz6:"Hiring by month",mcap:"Plan vs fact, all roles",mism:"ISM and BM",mlead:"Since January: hired {f} against a plan of {p}",mpart:"* The month is still in progress.",mnfc:"Left bar — plan from the Plans tab, right bar — hires from the Candidates tab, all roles. Under the month — plan achievement.",kAll:"Hired this month",kAllY:"Hired since January",ofp:"{p} planned",kTut:"Tutors",fcl:"month-end forecast: ",np:"no plan",z1y:"Year summary",z2:"Recruitment funnels",z3:"Hiring by role",z5:"Cost per hire",z6:"TCM forecast",
   tcm:"TCM funnel",tut:"Tutor funnel",hiring:"Plan vs fact by role",fc:"TCM plan completion: passed FE",cost:"Cost per hire by stream",
   k1:"TCM hired",k2:"Plan, all roles",k3:"Hired, all roles",k4:"TCM forecast for month end",k4y:"TCM plan completion for the year",
   k4done:"month result",k4cur:"forecast",k4none:"Forecast is kept from May",k4nodata:"No forecast inputs yet",
@@ -427,7 +426,7 @@ const UI = {
   months:["January","February","March","April","May","June","July","August","September","October","November","December"],
   short:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},
  id:{hint:"Masukkan kata sandi",ok:"Masuk",wrong:"Kata sandi salah",loading:"Memuat…",upd:"Diperbarui:",
-  z1:"Ringkasan bulan",mz6:"Rekrutmen per bulan",mcap:"Rencana vs fakta, semua posisi",mism:"ISM dan BM",mlead:"Sejak Januari: direkrut {f} dari rencana {p}",mpart:"* Bulan ini masih berjalan.",mnfc:"Batang kiri — rencana dari tab Hiring plan, batang kanan — rekrutmen dari tab Candidates, semua posisi. Di bawah bulan — pencapaian rencana.",kAll:"Direkrut bulan ini",kAllY:"Direkrut sejak Januari",ofp:"rencana {p}",kTut:"Tutor",fcl:"prakiraan akhir bulan: ",np:"tanpa rencana",z1y:"Ringkasan tahun",z2:"Corong rekrutmen",z3:"Rekrutmen per posisi",z5:"Biaya per rekrutmen",z6:"Prakiraan TCM",
+  z1:"Ringkasan bulan",mz6:"Rekrutmen per bulan",mcap:"Rencana vs fakta, semua posisi",mism:"ISM dan BM",mlead:"Sejak Januari: direkrut {f} dari rencana {p}",mpart:"* Bulan ini masih berjalan.",mnfc:"Batang kiri — rencana dari tab Plans, batang kanan — rekrutmen dari tab Candidates, semua posisi. Di bawah bulan — pencapaian rencana.",kAll:"Direkrut bulan ini",kAllY:"Direkrut sejak Januari",ofp:"rencana {p}",kTut:"Tutor",fcl:"prakiraan akhir bulan: ",np:"tanpa rencana",z1y:"Ringkasan tahun",z2:"Corong rekrutmen",z3:"Rekrutmen per posisi",z5:"Biaya per rekrutmen",z6:"Prakiraan TCM",
   tcm:"Corong TCM",tut:"Corong tutor",hiring:"Rencana vs fakta per posisi",fc:"Pencapaian rencana TCM: lulus FE",cost:"Biaya per rekrutmen per alur",
   k1:"TCM direkrut",k2:"Rencana, semua posisi",k3:"Direkrut, semua posisi",k4:"Prakiraan TCM akhir bulan",k4y:"Pencapaian rencana TCM setahun",
   k4done:"hasil bulan",k4cur:"prakiraan",k4none:"Prakiraan dimulai sejak Mei",k4nodata:"Belum ada data prakiraan",
@@ -456,7 +455,7 @@ const UI = {
   months:["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],
   short:["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"]},
  ru:{hint:"Введите пароль",ok:"Войти",wrong:"Неверный пароль",loading:"Загрузка…",upd:"Обновлено:",
-  z1:"Сводка за месяц",mz6:"Найм по месяцам",mcap:"План и факт найма, все роли",mism:"ISM и BM",mlead:"С начала года: нанято {f} при плане {p}",mpart:"* Месяц еще идет, цифра неполная.",mnfc:"Левый столбец — план из листа Hiring plan, правый — найм по листу Candidates, все роли. Под месяцем — процент выполнения.",kAll:"Нанято за месяц",kAllY:"Нанято с начала года",ofp:"план {p}",kTut:"Тьюторы",fcl:"прогноз на конец месяца: ",np:"нет плана",z1y:"Сводка за год",z2:"Воронки подбора",z3:"Найм по ролям",z5:"Стоимость найма",z6:"Прогноз TCM",
+  z1:"Сводка за месяц",mz6:"Найм по месяцам",mcap:"План и факт найма, все роли",mism:"ISM и BM",mlead:"С начала года: нанято {f} при плане {p}",mpart:"* Месяц еще идет, цифра неполная.",mnfc:"Левый столбец — план из листа Plans, правый — найм по листу Candidates, все роли. Под месяцем — процент выполнения.",kAll:"Нанято за месяц",kAllY:"Нанято с начала года",ofp:"план {p}",kTut:"Тьюторы",fcl:"прогноз на конец месяца: ",np:"нет плана",z1y:"Сводка за год",z2:"Воронки подбора",z3:"Найм по ролям",z5:"Стоимость найма",z6:"Прогноз TCM",
   tcm:"Воронка TCM",tut:"Воронка тьюторов",hiring:"План и факт по ролям",fc:"Выполнение плана TCM: сдали FE",cost:"Стоимость найма по потокам",
   k1:"Нанято TCM",k2:"План по всем ролям",k3:"Нанято по всем ролям",k4:"Прогноз TCM на конец месяца",k4y:"Выполнение плана TCM за год",
   k4done:"итог месяца",k4cur:"прогноз",k4none:"Прогноз ведется с мая",k4nodata:"Вводных для прогноза пока нет",
@@ -775,11 +774,6 @@ function render(){
 
   document.getElementById('l_k1').textContent = isYear ? t.kAllY : t.kAll;
   setTile(1, gAll);
-  const v1 = ratio(gAll);
-  document.getElementById('pb1').innerHTML = v1 === null ? '' : bar(v1);
-  const allHist = [];
-  for(let mo = 1; mo <= AM; mo++){ const s = sum(pick('hiring', mo), 'fact'); if(isNum(s)) allHist.push(s); }
-  spark(document.getElementById('sp1'), allHist);
 
   setTile(2, gTcm);
   const fr = isYear ? null : pick('forecast', m)[0];

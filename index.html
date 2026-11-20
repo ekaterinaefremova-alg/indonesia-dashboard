@@ -40,6 +40,7 @@
   .zone::after{content:"";flex:1;height:1px;background:var(--line)}
   .cap{font-size:12.5px;font-weight:600;padding:13px 16px;color:var(--fg);background:var(--cap-bg);
     border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+  .capsel{margin-left:auto;font-size:12px;padding:4px 8px}
   .cap::before{content:"";width:3px;height:13px;border-radius:2px;background:var(--accent);flex:none}
 
   .logo{display:inline-flex;align-items:center;background:#5B1FD9;color:#fff;font-weight:700;
@@ -108,7 +109,12 @@
   .kpi span{display:block;font-size:12px;font-weight:500;color:var(--mute);margin-top:7px}
   .kpi em{font-style:normal;font-size:12px;font-weight:600;display:block;margin-top:6px}
   .kpi em span{display:inline;margin-top:0;font-size:12px}
-  .kpi em .chip{display:inline-block;font-size:10px}
+  .kpi .chip{display:inline-block;font-size:10px;margin-top:0}
+  .kpi .lbl{display:block;font-size:12px;font-weight:600;color:var(--fg-2);margin:0 0 8px}
+  .kpi:nth-child(1) .lbl{font-size:13px}
+  .kpi .xtra{display:block;font-size:11.5px;font-weight:500;color:var(--mute);margin-top:6px;line-height:1.5}
+  .kpi .xtra b{display:inline;font-size:11.5px;letter-spacing:0;color:var(--fg-2)}
+  .kpi .pbar{margin-top:14px}
   .kpi .spark{margin-top:14px;height:34px}
   .kpi .spark svg{width:100%;height:34px;display:block;overflow:visible}
   .kpi .spark .sl{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
@@ -127,7 +133,6 @@
   .kpi:nth-child(1)::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;
     background:linear-gradient(180deg,var(--accent),var(--accent-2))}
   .kpi:nth-child(1) b{font-size:48px;letter-spacing:-1.8px}
-  .kpi:nth-child(1) span{font-size:13px;margin-top:10px}
 
   .kpi3{justify-content:flex-start}
   .kpi3 > span{margin:0 0 12px;font-size:12px;color:var(--mute)}
@@ -152,7 +157,9 @@
   td{padding:9px 8px;border-bottom:1px solid var(--line-soft);color:var(--fg-2);
     font-variant-numeric:tabular-nums}
   td:first-child{color:var(--fg);font-weight:500}
-  #hp:not(.mx) td:first-child{width:42%}
+  #hp:not(.mx){table-layout:fixed}
+  #hp:not(.mx) th:nth-child(2),#hp:not(.mx) th:nth-child(3){width:90px}
+  #hp:not(.mx) th:nth-child(4){width:230px}
   #ftcm td:first-child,#ftut td:first-child{width:40%}
   #fc td:first-child{width:30%}
   td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
@@ -260,7 +267,7 @@
     <button id="go"></button>
     <div class="err" id="err"></div>
   </div>
-  <div class="foot">ALGONOVA · INTERNAL ANALYTICS · BUILD V1</div>
+  <div class="foot">ALGONOVA · INTERNAL ANALYTICS · BUILD V3</div>
 </div>
 
 <div id="app" hidden>
@@ -275,7 +282,6 @@
     <div class="controls">
       <button class="btn seg" id="yearbtn"></button>
       <select id="month" aria-label="Month"></select>
-      <select id="dir" aria-label="Tutors"></select>
       <button class="btn" id="hidezero" style="min-width:auto"></button>
       <select id="lang" aria-label="Language">
         <option value="en">EN</option><option value="id">ID</option><option value="ru">RU</option>
@@ -287,16 +293,16 @@
 
   <div class="zone" id="z1"></div>
   <div class="kpis">
-    <div class="kpi"><b id="k1">—</b><span id="l_k1"></span><em id="d1"></em>
-      <div class="spark" id="sp1"></div></div>
-    <div class="kpi"><b id="k2">—</b><span id="l_k2"></span></div>
-    <div class="kpi"><b id="k3">—</b><span id="l_k3"></span><em id="d3"></em></div>
-    <div class="kpi"><b id="k4">—</b><span id="l_k4"></span><em id="d4"></em></div>
+    <div class="kpi"><span class="lbl" id="l_k1"></span><b id="k1">—</b><em id="d1"></em>
+      <div class="pbar" id="pb1"></div><div class="spark" id="sp1"></div></div>
+    <div class="kpi"><span class="lbl">TCM</span><b id="k2">—</b><em id="d2"></em><span class="xtra" id="x2"></span></div>
+    <div class="kpi"><span class="lbl">ISM</span><b id="k3">—</b><em id="d3"></em><span class="xtra" id="x3"></span></div>
+    <div class="kpi"><span class="lbl" id="l_k4"></span><b id="k4">—</b><em id="d4"></em><span class="xtra" id="x4"></span></div>
     <div class="kpi kpi3"><span id="l_k5"></span>
       <div class="trio">
         <div><b id="k5a">—</b><em id="l_k5a"></em></div>
         <div><b id="k5b">—</b><em>TCM</em></div>
-        <div><b id="k5c">—</b><em>Tutors</em></div>
+        <div><b id="k5c">—</b><em id="l_k5c"></em></div>
       </div>
     </div>
   </div>
@@ -314,14 +320,14 @@
       <div class="cap" id="c_tcm"></div>
       <div class="body"><table id="ftcm"><thead><tr>
         <th class="h_stage"></th><th class="n h_plan"></th><th class="n h_fact"></th>
-        <th class="n h_conv"></th><th class="n h_fromcv"></th><th style="width:62px"></th>
+        <th class="n h_fromcv"></th><th style="width:62px"></th>
       </tr></thead><tbody></tbody></table></div>
     </section>
     <section>
-      <div class="cap" id="c_tut"></div>
+      <div class="cap"><span id="c_tut"></span><select id="dir" class="capsel" aria-label="Tutors"></select></div>
       <div class="body"><table id="ftut"><thead><tr>
         <th class="h_stage"></th><th class="n h_plan"></th><th class="n h_fact"></th>
-        <th class="n h_conv"></th><th class="n h_fromcv"></th><th style="width:62px"></th>
+        <th class="n h_fromcv"></th><th style="width:62px"></th>
       </tr></thead><tbody></tbody></table></div>
     </section>
   </div>
@@ -334,10 +340,6 @@
       <p class="lead" id="lead_fc"></p>
       <div id="ch_line"></div>
       <div class="legend"><i class="solid" id="lg_fact"></i><i class="fcast" id="lg_fc"></i><i class="dash" id="lg_plan"></i></div>
-      <table id="fc"><thead><tr>
-        <th id="h_month"></th><th class="n h_plan"></th><th class="n" id="h_forecast"></th>
-        <th class="n" id="h_done2"></th><th style="width:150px"></th>
-      </tr></thead><tbody></tbody></table>
       <div class="note" id="n_fc"></div>
     </div>
   </section>
@@ -370,13 +372,13 @@ const SHEET_ID  = "1HPiMyBAWp69hKlZCfi_ZkzFPoqHKB7Ne1xNXFazdibc";
 const SHEET_TAB = "DASH_export";
 const CSV_URL   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXE0WM3nHC1Cj16H7HqSRqEVSBHV9E9FUdHngVXXff8GuDzJUhL8iBqPBaUSeupMrT5IIu9thGVa22/pub?gid=798141948&single=true&output=csv";
 const PASSWORD  = "indonesia2026";
-const BUILD     = "build v1 · 20.11.2026";
+const BUILD     = "build v3 · 20.11.2026";
 
 /* ============ дальше ничего менять не нужно ============ */
 
 const UI = {
  en:{hint:"Enter password",ok:"Log in",wrong:"Wrong password",loading:"Loading…",upd:"Updated:",
-  z1:"Month summary",z1y:"Year summary",z2:"Recruitment funnels",z3:"Hiring by role",z5:"Cost per hire",z6:"TCM forecast",
+  z1:"Month summary",kAll:"Hired this month",kAllY:"Hired since January",ofp:"{p} planned",kTut:"Tutors",fcl:"month-end forecast: ",np:"no plan",z1y:"Year summary",z2:"Recruitment funnels",z3:"Hiring by role",z5:"Cost per hire",z6:"TCM forecast",
   tcm:"TCM funnel",tut:"Tutor funnel",hiring:"Plan vs fact by role",fc:"TCM plan completion: passed FE",cost:"Cost per hire by stream",
   k1:"TCM hired",k2:"Plan, all roles",k3:"Hired, all roles",k4:"TCM forecast for month end",k4y:"TCM plan completion for the year",
   k4done:"month result",k4cur:"forecast",k4none:"Forecast is kept from May",k4nodata:"No forecast inputs yet",
@@ -400,12 +402,12 @@ const UI = {
   sumMonth:"Fact — employees with status Employed in the Candidates tab, by hire month.",
   sumCur:" The month is still in progress.",
   sumYear:"Year to date: plan and fact summed from January to the current month.",
-  nfun:"Conv. — from the previous stage. From CV — from the first stage.",
+  nfun:"From CV — share of the first stage of the funnel.",
   foot:"Source — DASH_export tab of the Mass recruitment Indonesia spreadsheet.",
   months:["January","February","March","April","May","June","July","August","September","October","November","December"],
   short:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},
  id:{hint:"Masukkan kata sandi",ok:"Masuk",wrong:"Kata sandi salah",loading:"Memuat…",upd:"Diperbarui:",
-  z1:"Ringkasan bulan",z1y:"Ringkasan tahun",z2:"Corong rekrutmen",z3:"Rekrutmen per posisi",z5:"Biaya per rekrutmen",z6:"Prakiraan TCM",
+  z1:"Ringkasan bulan",kAll:"Direkrut bulan ini",kAllY:"Direkrut sejak Januari",ofp:"rencana {p}",kTut:"Tutor",fcl:"prakiraan akhir bulan: ",np:"tanpa rencana",z1y:"Ringkasan tahun",z2:"Corong rekrutmen",z3:"Rekrutmen per posisi",z5:"Biaya per rekrutmen",z6:"Prakiraan TCM",
   tcm:"Corong TCM",tut:"Corong tutor",hiring:"Rencana vs fakta per posisi",fc:"Pencapaian rencana TCM: lulus FE",cost:"Biaya per rekrutmen per alur",
   k1:"TCM direkrut",k2:"Rencana, semua posisi",k3:"Direkrut, semua posisi",k4:"Prakiraan TCM akhir bulan",k4y:"Pencapaian rencana TCM setahun",
   k4done:"hasil bulan",k4cur:"prakiraan",k4none:"Prakiraan dimulai sejak Mei",k4nodata:"Belum ada data prakiraan",
@@ -429,12 +431,12 @@ const UI = {
   sumMonth:"Fakta — karyawan berstatus Employed di tab Candidates, menurut bulan rekrutmen.",
   sumCur:" Bulan ini masih berjalan.",
   sumYear:"Sejak awal tahun: rencana dan fakta dijumlahkan dari Januari hingga bulan ini.",
-  nfun:"Konv. — dari tahap sebelumnya. Dari CV — dari tahap pertama.",
+  nfun:"Dari CV — porsi dari tahap pertama corong.",
   foot:"Sumber — tab DASH_export dari spreadsheet Mass recruitment Indonesia.",
   months:["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],
   short:["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"]},
  ru:{hint:"Введите пароль",ok:"Войти",wrong:"Неверный пароль",loading:"Загрузка…",upd:"Обновлено:",
-  z1:"Сводка за месяц",z1y:"Сводка за год",z2:"Воронки подбора",z3:"Найм по ролям",z5:"Стоимость найма",z6:"Прогноз TCM",
+  z1:"Сводка за месяц",kAll:"Нанято за месяц",kAllY:"Нанято с начала года",ofp:"план {p}",kTut:"Тьюторы",fcl:"прогноз на конец месяца: ",np:"нет плана",z1y:"Сводка за год",z2:"Воронки подбора",z3:"Найм по ролям",z5:"Стоимость найма",z6:"Прогноз TCM",
   tcm:"Воронка TCM",tut:"Воронка тьюторов",hiring:"План и факт по ролям",fc:"Выполнение плана TCM: сдали FE",cost:"Стоимость найма по потокам",
   k1:"Нанято TCM",k2:"План по всем ролям",k3:"Нанято по всем ролям",k4:"Прогноз TCM на конец месяца",k4y:"Выполнение плана TCM за год",
   k4done:"итог месяца",k4cur:"прогноз",k4none:"Прогноз ведется с мая",k4nodata:"Вводных для прогноза пока нет",
@@ -458,7 +460,7 @@ const UI = {
   sumMonth:"Факт — сотрудники со статусом Employed в листе Candidates по месяцу найма.",
   sumCur:" Месяц еще идет.",
   sumYear:"С начала года: план и факт просуммированы с января по текущий месяц.",
-  nfun:"Конв. — от предыдущего этапа. От CV — от первого этапа.",
+  nfun:"От CV — доля от первого этапа воронки.",
   foot:"Источник — вкладка DASH_export таблицы Mass recruitment Indonesia.",
   months:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
   short:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"]}
@@ -472,7 +474,7 @@ const STREAMS = ["TCM","Tutors","ISM","BM","Total"];
 let ROWS = [];
 let lang  = sessionStorage.getItem('idnlang')  || 'en';
 let theme = sessionStorage.getItem('idntheme') || 'dark';
-let hideZero = sessionStorage.getItem('idnhide') === '1';
+let hideZero = sessionStorage.getItem('idnhide') !== '0';
 let yearMode = sessionStorage.getItem('idnyear') === '1';
 
 const L = () => UI[lang];
@@ -632,14 +634,12 @@ function spark(el, vals){
 /* ---------- блоки ---------- */
 function funnel(id, rows){
   const t = L(), tb = document.querySelector('#' + id + ' tbody');
-  if(!rows.length){ tb.innerHTML = '<tr><td colspan="6" class="empty">' + t.nodata + '</td></tr>'; return; }
+  if(!rows.length){ tb.innerHTML = '<tr><td colspan="5" class="empty">' + t.nodata + '</td></tr>'; return; }
   const top = rows[0].fact;
   tb.innerHTML = rows.map((r,i) => {
-    const prev = i > 0 ? rows[i-1].fact : null;
-    const conv = i === 0 ? (isNum(r.fact) ? 1 : null) : (isNum(r.fact) && prev) ? r.fact/prev : null;
     const cum  = (isNum(r.fact) && top) ? r.fact/top : null;
     return '<tr><td>' + T(r.key) + '</td><td class="n">' + (r.plan ? num(r.plan) : '—') + '</td><td class="n">' + num(r.fact) +
-      '</td><td class="n">' + pct(conv) + '</td><td class="n">' + pct(cum) + '</td><td>' +
+      '</td><td class="n">' + pct(cum) + '</td><td>' +
       (cum === null ? '' : bar(cum)) + '</td></tr>';
   }).join('');
 }
@@ -687,10 +687,10 @@ function applyChrome(){
   document.documentElement.lang = lang;
   const t = L(), set = (id,v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
   set('g_hint',UI.en.hint); set('go',UI.en.ok); set('l_upd',t.upd);
-  ['z2','z3','z5','z6'].forEach(z => set(z, t[z])); set('z1', yearMode ? t.z1y : t.z1);
+  ['z2','z3','z5','z6'].forEach(z => set(z, t[z])); 
   set('c_tcm',t.tcm); set('c_tut',t.tut); set('c_hiring',t.hiring); set('c_fc',t.fc); set('c_cost',t.cost);
-  set('l_k1',t.k1); set('l_k2',t.k2); set('l_k3',t.k3); set('l_k5',t.k5); set('l_k5a',t.unit);
-  set('h_month',t.month); set('h_forecast',t.fcfact); set('h_done2',t.done);
+  set('l_k5',t.k5); set('l_k5c',t.kTut); set('l_k5a',t.unit);
+  
   set('lg_fact',t.lgfact); set('lg_fc',t.lgfc); set('lg_plan',t.lgplan);
   set('n_fc',t.nfc); set('n_cph',t.ncph); set('n_fun',t.nfun);
   set('foot', 'Algonova · ' + t.foot + '   ·   ' + BUILD);
@@ -735,44 +735,43 @@ function render(){
   const dir = dsel.selectedOptions.length ? dsel.selectedOptions[0].dataset.raw : undefined;
   const rowsFor = (block, dim) => isYear ? agg(block, dim, AM) : pick(block, m, dim);
 
-  /* --- сводка --- */
+  document.getElementById('z1').textContent = isYear ? t.z1y : t.z1 + ': ' + (lang === 'ru' ? t.months[m-1].toLowerCase() : t.months[m-1]);
+  /* --- сводка: сначала весь найм, потом по направлениям --- */
   const hire = rowsFor('hiring');
-  const tcm = hire.find(r => r.key === TCM_ROLE) || {};
-  document.getElementById('k1').textContent = num(tcm.fact);
-  const d1 = document.getElementById('d1');
-  if(isNum(tcm.fact) && tcm.plan){
-    const v = Math.round(tcm.fact / tcm.plan * 100) / 100;
-    d1.className = v >= 1 ? 'good' : (v < 0.9 ? 'warn' : '');
-    d1.textContent = (v >= 1 ? '\u2191 ' : '\u2193 ') + pct(v) + ' ' + t.toplan + ' · ' + t.planw + ' ' + num(tcm.plan);
-  } else { d1.className = ''; d1.textContent = isNum(tcm.plan) && tcm.plan ? t.planw + ' ' + num(tcm.plan) : ''; }
-  const tcmHist = [];
-  for(let mo = 1; mo <= AM; mo++){ const r = pick('hiring', mo).find(x => x.key === TCM_ROLE); if(r && isNum(r.fact)) tcmHist.push(r.fact); }
-  spark(document.getElementById('sp1'), tcmHist);
+  const grp = f => { const rs = hire.filter(r => f(r.key)); return {plan: sum(rs,'plan'), fact: sum(rs,'fact'), rows: rs}; };
+  const isTut = k => k.indexOf('Online Tutor') === 0;
+  const gAll = grp(() => true), gTcm = grp(k => k === TCM_ROLE), gIsm = grp(k => k === 'Internal Sales Manager'),
+        gBm = grp(k => k === 'Booking Manager'), gTut = grp(isTut);
+  const ratio = g => (isNum(g.fact) && g.plan) ? Math.round(g.fact / g.plan * 100) / 100 : null;
+  const ofText = g => g.plan ? t.ofp.replace('{p}', num(g.plan)) : t.np;
+  const setTile = (n, g) => {
+    document.getElementById('k' + n).textContent = num(g.fact);
+    const v = ratio(g), d = document.getElementById('d' + n);
+    d.className = v === null ? '' : (v >= 1 ? 'good' : (v < 0.9 ? 'warn' : ''));
+    d.innerHTML = ofText(g) + (v === null ? '' : ' · ' + pct(v));
+  };
+  const line = r => '<b>' + T(r.key) + '</b> ' + num(r.fact) + ' ' + t.outof + ' ' + num(r.plan);
+  const active = r => (isNum(r.plan) && r.plan > 0) || (isNum(r.fact) && r.fact > 0);
 
-  const pAll = sum(hire, 'plan'), fAll = sum(hire, 'fact');
-  document.getElementById('k2').textContent = num(pAll);
-  document.getElementById('k3').textContent = num(fAll);
-  const d3 = document.getElementById('d3');
-  if(isNum(fAll) && pAll){ const v = Math.round(fAll/pAll*100)/100; d3.className = v >= 1 ? 'good' : (v < 0.9 ? 'warn' : '');
-    d3.textContent = (v >= 1 ? '\u2191 ' : '\u2193 ') + pct(v) + ' ' + t.toplan; }
-  else { d3.className = ''; d3.textContent = ''; }
+  document.getElementById('l_k1').textContent = isYear ? t.kAllY : t.kAll;
+  setTile(1, gAll);
+  const v1 = ratio(gAll);
+  document.getElementById('pb1').innerHTML = v1 === null ? '' : bar(v1);
+  const allHist = [];
+  for(let mo = 1; mo <= AM; mo++){ const s = sum(pick('hiring', mo), 'fact'); if(isNum(s)) allHist.push(s); }
+  spark(document.getElementById('sp1'), allHist);
 
-  const k4 = document.getElementById('k4'), d4 = document.getElementById('d4'), l4 = document.getElementById('l_k4');
-  if(isYear){
-    l4.textContent = t.k4y;
-    const v = (isNum(tcm.fact) && tcm.plan) ? tcm.fact / tcm.plan : null;
-    k4.textContent = pct(v); d4.innerHTML = v === null ? '' : chipOf(v, t).replace('margin-left:8px','');
-  } else {
-    l4.textContent = t.k4;
-    const fr = pick('forecast', m)[0];
-    if(!fr){ k4.textContent = '—'; d4.innerHTML = '<span class="empty">' + t.k4none + '</span>'; }
-    else if(fr.dim === 'future' && !(fr.fact > 0)){ k4.textContent = '—'; d4.innerHTML = '<span class="empty">' + t.k4nodata + '</span>'; }
-    else {
-      k4.textContent = num(fr.fact);
-      const v = fr.plan ? fr.fact / fr.plan : null;
-      d4.innerHTML = '<span class="empty">' + (fr.dim === 'done' ? t.k4done : t.k4cur) + ' · ' + t.planw + ' ' + num(fr.plan) + '</span>' + chipOf(v, t);
-    }
-  }
+  setTile(2, gTcm);
+  const fr = isYear ? null : pick('forecast', m)[0];
+  document.getElementById('x2').innerHTML = (fr && fr.dim === 'current' && fr.fact > 0)
+    ? t.fcl + '<b>' + num(fr.fact) + '</b>' + chipOf(fr.plan ? fr.fact / fr.plan : null, t) : '';
+
+  setTile(3, gIsm);
+  document.getElementById('x3').innerHTML = gBm.rows.filter(active).map(line).join('<br>');
+
+  document.getElementById('l_k4').textContent = t.kTut;
+  setTile(4, gTut);
+  document.getElementById('x4').innerHTML = gTut.rows.filter(active).map(line).join(' &nbsp;·&nbsp; ');
 
   const cms = costMonths();
   const costM = isYear ? null : (cms.includes(m) ? m : (cms.filter(x => x < m).pop() || null));
@@ -844,16 +843,8 @@ function render(){
   } else {
     const fr = fcRows.find(r => r.month === m);
     leadFc.innerHTML = (fr && isNum(val(fr))) ? t.months[m-1] + (fr.dim === 'done' ? t.leadfc1d : t.leadfc1) +
-      '<b>' + num(val(fr)) + '</b>' + t.leadfc2 + '<b>' + num(fr.plan) + '</b>' : '';
+      '<b>' + num(val(fr)) + '</b>' + t.leadfc2 + '<b>' + num(fr.plan) + '</b>' + chipOf(fr.plan ? val(fr)/fr.plan : null, t) : '';
   }
-  document.querySelector('#fc tbody').innerHTML = fcRows.length ? fcRows.map(r => {
-    const v0 = val(r), v = (isNum(v0) && r.plan) ? v0/r.plan : null;
-    const src = r.dim === 'done' ? t.srcFact : (v0 === null ? t.srcNone : t.srcFc);
-    return '<tr><td>' + t.months[r.month-1] + '<span class="src">' + src + '</span>' + chipOf(v, t) +
-      '</td><td class="n">' + (r.plan ? num(r.plan) : '—') + '</td><td class="n">' + num(v0) +
-      '</td><td class="n ' + (v !== null && v >= 1 ? 'good' : (v !== null && v < 0.9 ? 'warn' : '')) + '">' + pct(v) +
-      '</td><td>' + (v === null ? '' : bar(v, !isYear && r.month !== m)) + '</td></tr>';
-  }).join('') : '<tr><td colspan="5" class="empty">' + t.nodata + '</td></tr>';
 
   /* --- стоимость --- */
   const costTable = document.getElementById('cost'), chEl = document.getElementById('ch_cph');
@@ -880,8 +871,7 @@ function render(){
         '</td><td class="n">' + money(r.o) + '</td><td class="n">' + money(r.h) + '</td><td>' +
         (isNum(r.h) ? bar(r.h/maxC*1.2, r.d === 'Total') : '') + '</td></tr>').join('')
         : '<tr><td colspan="4" class="empty">' + t.nocost + '</td></tr>') + '</tbody>';
-    leadCost.innerHTML = costM === null ? '' : (costStale ? t.staleFrom + '<b>' + t.months[costM-1] + '</b>. ' : '') +
-      t.leadcost + '<b>' + money(costVal(costM,'TCM','hire')) + '</b>' + t.leadcost2 + '<b>' + money(costVal(costM,'Tutors','hire')) + '</b>';
+    leadCost.innerHTML = costStale ? t.staleFrom + '<b>' + t.months[costM-1] + '</b>' : '';
     nCost.textContent = t.ncost;
   }
 }

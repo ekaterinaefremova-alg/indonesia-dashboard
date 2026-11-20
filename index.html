@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algonova · Recruitment Indonesia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E9E7F1; --panel:#FFFFFF; --fg:#14131A; --fg-2:#4A4954; --mute:#8A8996;
+    --line:#D9D6E6; --line-soft:#EDEBF4;
+    --accent:#5B1FD9; --accent-2:#9B6BF0; --accent-soft:#EDE7F8; --cap-bg:#F5F2FB;
+    --fill:#B9A3E0; --fill-2:#E6DDF4;
+    --track:#F2F1F7; --ok:#2E8F73; --amber:#A97C2F; --bad:#B5657E; --field:#FFFFFF;
+    --shadow:0 1px 2px rgba(28,24,48,.06), 0 6px 20px rgba(28,24,48,.07);
+    --glow:rgba(91,31,217,.10); --hover:rgba(91,31,217,.04);
+  }
+  body[data-theme="dark"]{
+    --bg:#0C0E17; --panel:#1B1F2E; --fg:#F2F2F7; --fg-2:#C2C1CE; --mute:#8B8A9B;
+    --line:#31364C; --line-soft:#252939;
+    --accent:#A78BFA; --accent-2:#7DD3FC; --accent-soft:#262A3D; --cap-bg:#22273A;
+    --fill:#8A6FE0; --fill-2:#37305C;
+    --track:#232739; --ok:#6ED6B4; --amber:#DCB878; --bad:#E094AC; --field:#1E2130;
+    --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px rgba(0,0,0,.35);
+    --glow:rgba(124,77,238,.22); --hover:rgba(167,139,250,.07);
+  }
+  body::before{content:"";position:fixed;inset:0 0 auto;height:340px;pointer-events:none;z-index:0;
+    background:radial-gradient(900px 300px at 18% -60px, var(--glow), transparent 70%)}
+  *{box-sizing:border-box}
+  body{margin:0;padding:26px 28px 48px;background:var(--bg);color:var(--fg);
+    font-family:Montserrat,Arial,Helvetica,sans-serif;font-size:13px;line-height:1.45;
+    -webkit-font-smoothing:antialiased}
+
+  h1{font-size:19px;font-weight:700;margin:0;letter-spacing:-.4px}
+  .sub{font-size:12px;font-weight:500;color:var(--mute)}
+  .zone{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+    color:var(--fg-2);margin:32px 0 13px;display:flex;align-items:center;gap:11px}
+  .zone::after{content:"";flex:1;height:1px;background:var(--line)}
+  .cap{font-size:12.5px;font-weight:600;padding:13px 16px;color:var(--fg);background:var(--cap-bg);
+    border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+  .cap::before{content:"";width:3px;height:13px;border-radius:2px;background:var(--accent);flex:none}
+
+  .logo{display:inline-flex;align-items:center;background:#5B1FD9;color:#fff;font-weight:700;
+    font-size:15px;letter-spacing:-.2px;padding:3px 10px 4px;border-radius:3px;position:relative;
+    font-family:Montserrat,Arial,sans-serif}
+  .logo::after{content:"";position:absolute;left:10px;bottom:-6px;
+    border-left:7px solid #5B1FD9;border-bottom:7px solid transparent}
+  body[data-theme="dark"] .logo{background:#7C4DEE}
+  body[data-theme="dark"] .logo::after{border-left-color:#7C4DEE}
+  .logo.sm{font-size:12px;padding:2px 8px 3px}
+  .logo.sm::after{left:8px;bottom:-5px;border-left-width:6px;border-bottom-width:6px}
+  #gate[hidden]{display:none !important}
+  #gate{position:fixed;inset:0;z-index:50;margin:0;padding:28px;background:#12172A;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+  #gate .deco{position:absolute;inset:0;pointer-events:none;opacity:.5}
+  #gate .box{position:relative;width:100%;max-width:340px}
+  #gate h1{color:#fff;font-size:31px;line-height:1.1;letter-spacing:-1px;margin:20px 0 9px}
+  #gate h1 em{font-style:normal;color:#A78BFA}
+  #gate .sub{color:#8E96AE;font-size:13px;margin-bottom:20px}
+  #gate input{width:100%;font-family:inherit;font-size:14px;padding:12px 14px;color:#fff;
+    background:#1B2138;border:1px solid #2C3350;border-radius:9px;margin-bottom:10px}
+  #gate input::placeholder{color:#5D6580}
+  #gate button{width:100%;font-family:inherit;font-size:14px;font-weight:700;padding:12px;
+    color:#fff;border:none;background:#5B1FD9;cursor:pointer;border-radius:9px}
+  #gate button:hover{background:#6D33E8}
+  #gate .err{color:#F58C86;font-size:12px;min-height:16px;margin-top:10px}
+  #gate .foot{position:absolute;bottom:24px;color:#4E566E;font-size:11px;letter-spacing:.4px}
+  #app[hidden]{display:none !important}
+  .brand{display:flex;align-items:center;gap:11px}
+
+  header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+    flex-wrap:wrap;padding:18px 28px 15px;border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:20;margin:-26px -28px 0;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:saturate(1.6) blur(12px);-webkit-backdrop-filter:saturate(1.6) blur(12px)}
+  @supports not (backdrop-filter:blur(1px)){ header{background:var(--bg)} }
+  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  select,.btn{font-family:inherit;font-size:13px;font-weight:500;padding:8px 12px;
+    border:1px solid var(--line);background:var(--field);color:var(--fg);border-radius:8px}
+  .btn{cursor:pointer;min-width:38px;font-size:14px}
+  .btn.seg{font-size:13px;font-weight:600;min-width:auto;padding:8px 14px}
+  .btn.seg.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  select:hover,.btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.seg.on:hover{color:#fff;filter:brightness(1.08)}
+  select:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  .zone,.grid,section,.kpis,footer,.note{position:relative;z-index:1}
+  .grid{display:grid;gap:16px;align-items:start}
+  .g2{grid-template-columns:1fr 1fr}
+  section{border:1px solid var(--line);border-radius:14px;background:var(--panel);
+    overflow:hidden;box-shadow:var(--shadow)}
+  .body{padding:0 16px 16px;overflow-x:auto}
+  .body table{margin:0 -16px;width:calc(100% + 32px)}
+  .body th:first-child,.body td:first-child{padding-left:16px}
+  .body th:last-child,.body td:last-child{padding-right:16px}
+  .chartbox{padding-top:16px}
+
+  /* ---- сводка ---- */
+  .kpis{display:grid;gap:14px;
+    grid-template-columns:1.4fr 1fr 1fr 1.25fr;grid-template-rows:1fr 1fr;align-items:stretch}
+  .kpi{border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    background:var(--panel);box-shadow:var(--shadow);position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center}
+  .kpi b{display:block;font-size:26px;font-weight:700;line-height:1;letter-spacing:-.8px;
+    font-variant-numeric:tabular-nums}
+  .kpi span{display:block;font-size:12px;font-weight:500;color:var(--mute);margin-top:7px}
+  .kpi em{font-style:normal;font-size:12px;font-weight:600;display:block;margin-top:6px}
+  .kpi em span{display:inline;margin-top:0;font-size:12px}
+  .kpi em .chip{display:inline-block;font-size:10px}
+  .kpi .spark{margin-top:14px;height:34px}
+  .kpi .spark svg{width:100%;height:34px;display:block;overflow:visible}
+  .kpi .spark .sl{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+  .kpi .spark .sa{fill:url(#spGrad);stroke:none}
+  .kpi .spark .sd{fill:var(--accent)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .kpis{animation:riseIn .32s ease both}
+  @media(prefers-reduced-motion:reduce){*{animation:none !important}}
+
+  .kpi:nth-child(1){grid-column:1;grid-row:1 / 3;
+    background:linear-gradient(160deg,var(--accent-soft) 0%,var(--panel) 62%)}
+  .kpi:nth-child(2){grid-column:2;grid-row:1}
+  .kpi:nth-child(3){grid-column:3;grid-row:1}
+  .kpi:nth-child(4){grid-column:2 / 4;grid-row:2}
+  .kpi:nth-child(5){grid-column:4;grid-row:1 / 3}
+  .kpi:nth-child(1)::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;
+    background:linear-gradient(180deg,var(--accent),var(--accent-2))}
+  .kpi:nth-child(1) b{font-size:48px;letter-spacing:-1.8px}
+  .kpi:nth-child(1) span{font-size:13px;margin-top:10px}
+
+  .kpi3{justify-content:flex-start}
+  .kpi3 > span{margin:0 0 12px;font-size:12px;color:var(--mute)}
+  .kpi3 .trio{display:flex;flex-direction:column;gap:11px}
+  .kpi3 .trio > div{display:flex;align-items:baseline;gap:9px}
+  .kpi3 .trio b{font-size:23px;letter-spacing:-.6px;min-width:66px}
+  .kpi3 .trio em{font-style:normal;font-size:11px;font-weight:500;color:var(--mute);margin:0}
+
+  @media(max-width:1100px){
+    .kpis{grid-template-columns:1fr 1fr}
+    .kpi:nth-child(n){grid-column:auto;grid-row:auto}
+    .kpi:nth-child(1) b{font-size:38px}
+    .kpi3 .trio{flex-direction:row;flex-wrap:wrap}
+    .kpi3 .trio > div{flex-direction:column;gap:4px;align-items:flex-start}
+  }
+
+  /* ---- таблицы ---- */
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{font-size:11px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--mute);
+    text-align:left;padding:8px;background:var(--cap-bg);border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody tr:hover{background:var(--hover)}
+  td{padding:9px 8px;border-bottom:1px solid var(--line-soft);color:var(--fg-2);
+    font-variant-numeric:tabular-nums}
+  td:first-child{color:var(--fg);font-weight:500}
+  #hp:not(.mx) td:first-child{width:42%}
+  #ftcm td:first-child,#ftut td:first-child{width:40%}
+  #fc td:first-child{width:30%}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tbody tr:last-child td{border-bottom:none}
+  .src{display:inline-block;font-size:9.5px;font-weight:600;letter-spacing:.3px;
+    text-transform:uppercase;color:var(--mute);margin-left:9px;vertical-align:1px}
+  .chip{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;
+    margin-left:8px;vertical-align:1px;white-space:nowrap}
+  .chip.ok{background:var(--accent-soft);color:var(--accent)}
+  .chip.near{background:var(--track);color:var(--fg-2)}
+  .chip.low{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+  tr.total td{font-weight:700;color:var(--fg);border-top:1px solid var(--line)}
+
+  table.mx{font-size:11.5px;border-collapse:separate;border-spacing:0;
+    table-layout:fixed;width:100%;min-width:940px}
+  table.mx th:first-child{width:168px}
+  table.mx th{padding:8px 6px;text-align:center;font-size:10px}
+  table.mx th:first-child,table.mx td:first-child{text-align:left;padding-left:16px;
+    position:sticky;left:0;background:var(--panel);z-index:2;white-space:nowrap;font-weight:500}
+  table.mx th:first-child{background:var(--cap-bg);z-index:3}
+  table.mx td{padding:10px 6px;text-align:center;border-bottom:1px solid var(--line-soft)}
+  table.mx td.c{font-variant-numeric:tabular-nums;line-height:1.2}
+  table.mx td.c b{display:block;font-weight:700;font-size:14.5px;letter-spacing:-.3px}
+  table.mx td.c i{font-style:normal;display:block;font-size:10.5px;color:var(--mute);
+    margin-top:3px;white-space:nowrap}
+  table.mx td.c b.hit{color:var(--accent)}
+  .mxb{display:block;height:8px;border-radius:4px;background:var(--track);margin:7px auto 2px;width:92%;overflow:hidden}
+  .mxb i{display:block;height:8px;border-radius:4px;margin:0;
+    background:linear-gradient(90deg,var(--fill) 0%,var(--accent) 100%)}
+  .mxb.full i{background:linear-gradient(90deg,var(--accent) 0%,var(--accent-2) 100%)}
+  table.mx td.c.none{color:var(--mute);opacity:.45}
+  table.mx td.last{border-left:2px solid var(--line)}
+  .mxlegend{display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+    font-size:11px;color:var(--mute);margin-top:12px}
+  .mxlegend b{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+  .barwrap{background:var(--track);height:9px;width:100%;border-radius:5px;overflow:hidden}
+  .bar{height:9px;display:block;border-radius:5px;
+    background:linear-gradient(90deg,var(--accent) 0%,var(--accent-2) 100%)}
+  .bar.dim{background:linear-gradient(90deg,var(--fill) 0%,var(--fill-2) 100%);opacity:.75}
+  .stage{display:flex;align-items:center;gap:10px}
+  .stage .barwrap{flex:1}
+  .good{color:var(--ok)} .warn{color:var(--bad)} .empty{color:var(--mute);font-weight:400}
+
+  /* ---- графики ---- */
+  svg.lc{width:100%;height:auto;display:block;margin:6px 0 2px;overflow:visible}
+  svg.lc .grid{stroke:var(--line-soft);stroke-width:1}
+  svg.lc .axis{fill:var(--mute);font-size:10px;font-weight:500}
+  svg.lc .xl{fill:var(--mute);font-size:9.5px;font-weight:500;text-anchor:middle}
+  svg.lc .xl.on{fill:var(--fg);font-weight:700}
+  svg.lc .ln{fill:none;stroke:url(#lcStroke);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+  svg.lc .ln.fc{stroke-dasharray:5 4;opacity:.85}
+  svg.lc .ln.pl{stroke:var(--mute);stroke-width:1.4;stroke-dasharray:4 4;opacity:.65}
+  svg.lc .dot{fill:var(--panel);stroke:var(--accent);stroke-width:2}
+  svg.lc .dot.on{fill:var(--accent)}
+  svg.lc .val{fill:var(--fg);font-size:9.5px;font-weight:700;text-anchor:middle;
+    paint-order:stroke;stroke:var(--panel);stroke-width:3.5px;stroke-linejoin:round}
+  svg.lc .val.on{font-size:11px;fill:var(--accent)}
+  svg.lc .pv{fill:var(--mute);font-size:9px;font-weight:600;text-anchor:middle}
+  svg.lc .area{fill:url(#lcArea);stroke:none}
+  .pchart{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:36px;margin-bottom:28px;
+    border-bottom:1px solid var(--line)}
+  .pcol{flex:1;position:relative;height:100%;display:flex;align-items:flex-end;justify-content:center}
+  .pcol.sel::before{content:"";position:absolute;inset:-34px -6px -22px;border-radius:8px;
+    background:var(--accent-soft);z-index:0}
+  .pcol .pv{position:absolute;top:-34px;left:0;right:0;text-align:center;font-size:10px;
+    font-weight:700;color:var(--accent);z-index:1;white-space:nowrap}
+  .pcol .pv.b{top:-19px;color:var(--accent-2)}
+  .pbars{display:flex;gap:4px;align-items:flex-end;width:100%;height:100%;justify-content:center;z-index:1}
+  .pb{width:42%;border-radius:4px 4px 0 0;min-height:2px;opacity:.45}
+  .pcol.sel .pb{opacity:1}
+  .pb.a{background:linear-gradient(180deg,var(--accent) 0%,var(--fill) 100%)}
+  .pb.b{background:linear-gradient(180deg,var(--accent-2) 0%,var(--fill-2) 100%)}
+  .pcol u{position:absolute;bottom:-20px;left:0;right:0;text-align:center;text-decoration:none;
+    font-size:10.5px;font-weight:500;color:var(--mute);z-index:1}
+  .pcol.sel u{color:var(--fg);font-weight:700}
+  .lead{font-size:12.5px;font-weight:600;color:var(--fg);margin:0 0 2px}
+  .lead b{color:var(--accent)}
+  .legend{display:flex;gap:16px;align-items:center;margin:10px 0 0;font-size:11px;color:var(--mute)}
+  .legend i{font-style:normal;display:inline-flex;align-items:center;gap:6px}
+  .legend i::before{content:"";width:11px;height:9px;border-radius:2px;background:var(--fill)}
+  .legend i.sq2::before{background:var(--accent-2)}
+  .legend i.dash::before{height:0;border-top:1px dashed var(--mute);border-radius:0;width:15px}
+  .legend i.solid::before{height:3px;border-radius:2px;background:var(--accent);width:15px}
+  .legend i.fcast::before{height:0;border-top:2px dashed var(--accent);border-radius:0;width:15px}
+  .note{font-size:12px;color:var(--mute);margin-top:12px;line-height:1.5}
+  footer{margin-top:34px;font-size:12px;color:var(--mute);border-top:1px solid var(--line);padding-top:14px}
+  @media(max-width:960px){.g2{grid-template-columns:1fr}
+    body{padding:18px 16px 36px}}
+</style>
+</head>
+<body data-theme="dark">
+
+<div id="gate">
+  <svg class="deco" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M-40 600 C 220 470, 240 250, 430 210 S 700 330, 900 190 S 1180 120, 1260 60"
+          fill="none" stroke="#2A3150" stroke-width="2" stroke-linecap="round"/>
+    <path d="M-40 680 C 240 560, 280 330, 470 290 S 730 400, 930 265 S 1190 200, 1270 145"
+          fill="none" stroke="#222840" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  <div class="box">
+    <span class="logo">Algonova</span>
+    <h1>Recruitment <em>Indonesia</em></h1>
+    <div class="sub" id="g_hint"></div>
+    <input id="pw" type="password" autocomplete="current-password">
+    <button id="go"></button>
+    <div class="err" id="err"></div>
+  </div>
+  <div class="foot">ALGONOVA · INTERNAL ANALYTICS · BUILD V1</div>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <div class="brand">
+      <span class="logo sm">Algonova</span>
+      <div>
+        <h1>Recruitment Indonesia</h1>
+        <div class="sub"><span id="l_upd"></span> <span id="upd">—</span></div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn seg" id="yearbtn"></button>
+      <select id="month" aria-label="Month"></select>
+      <select id="dir" aria-label="Tutors"></select>
+      <button class="btn" id="hidezero" style="min-width:auto"></button>
+      <select id="lang" aria-label="Language">
+        <option value="en">EN</option><option value="id">ID</option><option value="ru">RU</option>
+      </select>
+      <button class="btn" id="theme" aria-label="Theme">&#9686;</button>
+      <button class="btn" id="reload" aria-label="Reload">&#8635;</button>
+    </div>
+  </header>
+
+  <div class="zone" id="z1"></div>
+  <div class="kpis">
+    <div class="kpi"><b id="k1">—</b><span id="l_k1"></span><em id="d1"></em>
+      <div class="spark" id="sp1"></div></div>
+    <div class="kpi"><b id="k2">—</b><span id="l_k2"></span></div>
+    <div class="kpi"><b id="k3">—</b><span id="l_k3"></span><em id="d3"></em></div>
+    <div class="kpi"><b id="k4">—</b><span id="l_k4"></span><em id="d4"></em></div>
+    <div class="kpi kpi3"><span id="l_k5"></span>
+      <div class="trio">
+        <div><b id="k5a">—</b><em id="l_k5a"></em></div>
+        <div><b id="k5b">—</b><em>TCM</em></div>
+        <div><b id="k5c">—</b><em>Tutors</em></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" id="sumnote"></div>
+
+  <div class="zone" id="z3"></div>
+  <section>
+    <div class="cap" id="c_hiring"></div>
+    <div class="body"><table id="hp"></table><div class="note" id="n_hp"></div></div>
+  </section>
+
+  <div class="zone" id="z2"></div>
+  <div class="grid g2">
+    <section>
+      <div class="cap" id="c_tcm"></div>
+      <div class="body"><table id="ftcm"><thead><tr>
+        <th class="h_stage"></th><th class="n h_plan"></th><th class="n h_fact"></th>
+        <th class="n h_conv"></th><th class="n h_fromcv"></th><th style="width:62px"></th>
+      </tr></thead><tbody></tbody></table></div>
+    </section>
+    <section>
+      <div class="cap" id="c_tut"></div>
+      <div class="body"><table id="ftut"><thead><tr>
+        <th class="h_stage"></th><th class="n h_plan"></th><th class="n h_fact"></th>
+        <th class="n h_conv"></th><th class="n h_fromcv"></th><th style="width:62px"></th>
+      </tr></thead><tbody></tbody></table></div>
+    </section>
+  </div>
+  <div class="note" id="n_fun"></div>
+
+  <div class="zone" id="z6"></div>
+  <section>
+    <div class="cap" id="c_fc"></div>
+    <div class="body chartbox">
+      <p class="lead" id="lead_fc"></p>
+      <div id="ch_line"></div>
+      <div class="legend"><i class="solid" id="lg_fact"></i><i class="fcast" id="lg_fc"></i><i class="dash" id="lg_plan"></i></div>
+      <table id="fc"><thead><tr>
+        <th id="h_month"></th><th class="n h_plan"></th><th class="n" id="h_forecast"></th>
+        <th class="n" id="h_done2"></th><th style="width:150px"></th>
+      </tr></thead><tbody></tbody></table>
+      <div class="note" id="n_fc"></div>
+    </div>
+  </section>
+
+  <div class="zone" id="z5"></div>
+  <section>
+    <div class="cap" id="c_cost"></div>
+    <div class="body">
+      <div class="grid g2" id="costgrid">
+        <div class="chartbox"><p class="lead" id="lead_cost"></p>
+          <div class="pchart" id="ch_cph"></div>
+          <div class="legend"><i>TCM</i><i class="sq2">Tutors</i></div>
+          <div class="note" id="n_cph"></div></div>
+        <div><table id="cost"></table>
+          <div class="note" id="n_cost"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+/* ====================== НАСТРОЙКИ ======================
+   CSV_URL  — ссылка на опубликованную вкладку DASH_export
+   PASSWORD — пароль для входа
+   ======================================================= */
+
+const SHEET_ID  = "1HPiMyBAWp69hKlZCfi_ZkzFPoqHKB7Ne1xNXFazdibc";
+const SHEET_TAB = "DASH_export";
+const CSV_URL   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXE0WM3nHC1Cj16H7HqSRqEVSBHV9E9FUdHngVXXff8GuDzJUhL8iBqPBaUSeupMrT5IIu9thGVa22/pub?gid=798141948&single=true&output=csv";
+const PASSWORD  = "indonesia2026";
+const BUILD     = "build v1 · 20.11.2026";
+
+/* ============ дальше ничего менять не нужно ============ */
+
+const UI = {
+ en:{hint:"Enter password",ok:"Log in",wrong:"Wrong password",loading:"Loading…",upd:"Updated:",
+  z1:"Month summary",z1y:"Year summary",z2:"Recruitment funnels",z3:"Hiring by role",z5:"Cost per hire",z6:"TCM forecast",
+  tcm:"TCM funnel",tut:"Tutor funnel",hiring:"Plan vs fact by role",fc:"TCM plan completion: passed FE",cost:"Cost per hire by stream",
+  k1:"TCM hired",k2:"Plan, all roles",k3:"Hired, all roles",k4:"TCM forecast for month end",k4y:"TCM plan completion for the year",
+  k4done:"month result",k4cur:"forecast",k4none:"Forecast is kept from May",k4nodata:"No forecast inputs yet",
+  k5:"Cost per hire, $",unit:"Unit",
+  role:"Role",stage:"Stage",plan:"Plan",fact:"Fact",conv:"Conv.",fromcv:"From CV",done:"Achieved",
+  stream:"Stream",cpo:"Per onboard, $",cpoShort:"onboard",cphh:"Per hire, $",
+  noplan:"no plan",hide:"Hide no-plan",showall:"Show all",hidden:"roles without a plan hidden: ",
+  nodata:"No data for this month",nocost:"No cost data yet",
+  toplan:"vs plan",planw:"plan",outof:"of",totalw:"Year",year:"Full year",
+  month:"Month",fcfact:"Fact / forecast",
+  onplan:"On plan",nearplan:"At risk",behind:"Behind",srcFact:"fact",srcFc:"forecast",srcNone:"no data",
+  lgfact:"Fact",lgfc:"Forecast",lgplan:"Plan",lgfull:"plan met",lgpart:"bar length — achievement",
+  mxnote:"In each cell: plan achievement, below — fact of plan",
+  leadfc1:": forecast ",leadfc1d:": result ",leadfc2:" against a plan of ",leadfcY:"May to current month: ",
+  nfc:"Source — TCM Forecast tab. Closed months show who passed FE; the current and future months come from the onboarding intake and conversion model.",
+  leadcost:"A TCM hire costs ",leadcost2:", a tutor — ",
+  staleFrom:"Last costed month — ",
+  ncph:"Onboard — reached onboarding. Hire — passed FE and started work.",
+  ncost:"Source — Cost per hire mass, Indonesia 2026 tab. Unit includes every stream, offline too.",
+  cphYear:"Year cost per hire = year spend / year hires.",yearcalc:"spend / hires",
+  sumMonth:"Fact — employees with status Employed in the Candidates tab, by hire month.",
+  sumCur:" The month is still in progress.",
+  sumYear:"Year to date: plan and fact summed from January to the current month.",
+  nfun:"Conv. — from the previous stage. From CV — from the first stage.",
+  foot:"Source — DASH_export tab of the Mass recruitment Indonesia spreadsheet.",
+  months:["January","February","March","April","May","June","July","August","September","October","November","December"],
+  short:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},
+ id:{hint:"Masukkan kata sandi",ok:"Masuk",wrong:"Kata sandi salah",loading:"Memuat…",upd:"Diperbarui:",
+  z1:"Ringkasan bulan",z1y:"Ringkasan tahun",z2:"Corong rekrutmen",z3:"Rekrutmen per posisi",z5:"Biaya per rekrutmen",z6:"Prakiraan TCM",
+  tcm:"Corong TCM",tut:"Corong tutor",hiring:"Rencana vs fakta per posisi",fc:"Pencapaian rencana TCM: lulus FE",cost:"Biaya per rekrutmen per alur",
+  k1:"TCM direkrut",k2:"Rencana, semua posisi",k3:"Direkrut, semua posisi",k4:"Prakiraan TCM akhir bulan",k4y:"Pencapaian rencana TCM setahun",
+  k4done:"hasil bulan",k4cur:"prakiraan",k4none:"Prakiraan dimulai sejak Mei",k4nodata:"Belum ada data prakiraan",
+  k5:"Biaya per rekrutmen, $",unit:"Unit",
+  role:"Posisi",stage:"Tahap",plan:"Rencana",fact:"Fakta",conv:"Konv.",fromcv:"Dari CV",done:"Pencapaian",
+  stream:"Alur",cpo:"Per onboarding, $",cpoShort:"onboarding",cphh:"Per rekrutmen, $",
+  noplan:"tanpa rencana",hide:"Sembunyikan tanpa rencana",showall:"Tampilkan semua",hidden:"posisi tanpa rencana disembunyikan: ",
+  nodata:"Tidak ada data untuk bulan ini",nocost:"Belum ada data biaya",
+  toplan:"vs rencana",planw:"rencana",outof:"dari",totalw:"Tahun",year:"Setahun",
+  month:"Bulan",fcfact:"Fakta / prakiraan",
+  onplan:"Sesuai rencana",nearplan:"Berisiko",behind:"Kurang",srcFact:"fakta",srcFc:"prakiraan",srcNone:"tanpa data",
+  lgfact:"Fakta",lgfc:"Prakiraan",lgplan:"Rencana",lgfull:"rencana tercapai",lgpart:"panjang batang — pencapaian",
+  mxnote:"Di setiap sel: pencapaian rencana, di bawah — fakta dari rencana",
+  leadfc1:": prakiraan ",leadfc1d:": hasil ",leadfc2:" dengan rencana ",leadfcY:"Mei hingga bulan ini: ",
+  nfc:"Sumber — tab TCM Forecast. Bulan yang selesai menunjukkan yang lulus FE; bulan berjalan dan mendatang dihitung dari model rekrutmen onboarding dan konversi.",
+  leadcost:"Rekrutmen TCM berbiaya ",leadcost2:", tutor — ",
+  staleFrom:"Bulan terakhir yang dihitung — ",
+  ncph:"Onboarding — mencapai onboarding. Rekrutmen — lulus FE dan mulai bekerja.",
+  ncost:"Sumber — Cost per hire mass, tab Indonesia 2026. Unit mencakup semua alur, termasuk offline.",
+  cphYear:"Biaya per rekrutmen setahun = pengeluaran setahun / rekrutmen setahun.",yearcalc:"pengeluaran / rekrutmen",
+  sumMonth:"Fakta — karyawan berstatus Employed di tab Candidates, menurut bulan rekrutmen.",
+  sumCur:" Bulan ini masih berjalan.",
+  sumYear:"Sejak awal tahun: rencana dan fakta dijumlahkan dari Januari hingga bulan ini.",
+  nfun:"Konv. — dari tahap sebelumnya. Dari CV — dari tahap pertama.",
+  foot:"Sumber — tab DASH_export dari spreadsheet Mass recruitment Indonesia.",
+  months:["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],
+  short:["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"]},
+ ru:{hint:"Введите пароль",ok:"Войти",wrong:"Неверный пароль",loading:"Загрузка…",upd:"Обновлено:",
+  z1:"Сводка за месяц",z1y:"Сводка за год",z2:"Воронки подбора",z3:"Найм по ролям",z5:"Стоимость найма",z6:"Прогноз TCM",
+  tcm:"Воронка TCM",tut:"Воронка тьюторов",hiring:"План и факт по ролям",fc:"Выполнение плана TCM: сдали FE",cost:"Стоимость найма по потокам",
+  k1:"Нанято TCM",k2:"План по всем ролям",k3:"Нанято по всем ролям",k4:"Прогноз TCM на конец месяца",k4y:"Выполнение плана TCM за год",
+  k4done:"итог месяца",k4cur:"прогноз",k4none:"Прогноз ведется с мая",k4nodata:"Вводных для прогноза пока нет",
+  k5:"Стоимость найма, $",unit:"Юнит",
+  role:"Роль",stage:"Этап",plan:"План",fact:"Факт",conv:"Конв.",fromcv:"От CV",done:"Выполнение",
+  stream:"Поток",cpo:"За онборд, $",cpoShort:"онборд",cphh:"За найм, $",
+  noplan:"нет плана",hide:"Скрыть без плана",showall:"Показать все",hidden:"скрыто ролей без плана: ",
+  nodata:"Нет данных за месяц",nocost:"Данных о стоимости пока нет",
+  toplan:"к плану",planw:"план",outof:"из",totalw:"Год",year:"Весь год",
+  month:"Месяц",fcfact:"Факт / прогноз",
+  onplan:"В плане",nearplan:"Риск",behind:"Дефицит",srcFact:"факт",srcFc:"прогноз",srcNone:"нет данных",
+  lgfact:"Факт",lgfc:"Прогноз",lgplan:"План",lgfull:"план выполнен",lgpart:"длина полосы — выполнение",
+  mxnote:"В ячейке: выполнение плана, под полосой — факт из плана",
+  leadfc1:": прогноз ",leadfc1d:": итог ",leadfc2:" при плане ",leadfcY:"С мая по текущий месяц: ",
+  nfc:"Источник — вкладка TCM Forecast. Закрытые месяцы — факт сдавших FE, текущий и будущие — модель по набору на онбординг и конверсиям.",
+  leadcost:"Найм TCM стоит ",leadcost2:", тьютора — ",
+  staleFrom:"Последний посчитанный месяц — ",
+  ncph:"Онборд — дошедший до онбординга. Найм — сдавший FE и вышедший на работу.",
+  ncost:"Источник — Cost per hire mass, лист Indonesia 2026. Юнит — все потоки, включая офлайн.",
+  cphYear:"Стоимость найма за год = расход за год / наймы за год.",yearcalc:"расход / наймы",
+  sumMonth:"Факт — сотрудники со статусом Employed в листе Candidates по месяцу найма.",
+  sumCur:" Месяц еще идет.",
+  sumYear:"С начала года: план и факт просуммированы с января по текущий месяц.",
+  nfun:"Конв. — от предыдущего этапа. От CV — от первого этапа.",
+  foot:"Источник — вкладка DASH_export таблицы Mass recruitment Indonesia.",
+  months:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+  short:["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"]}
+};
+
+// этапы воронок, должности и потоки не переводятся — всегда как в таблице
+const TERMS = { "All tutors": {ru:"Все тьюторы", id:"Semua tutor"} };
+const TCM_ROLE = "Trial Class Manager";
+const STREAMS = ["TCM","Tutors","ISM","BM","Total"];
+
+let ROWS = [];
+let lang  = sessionStorage.getItem('idnlang')  || 'en';
+let theme = sessionStorage.getItem('idntheme') || 'dark';
+let hideZero = sessionStorage.getItem('idnhide') === '1';
+let yearMode = sessionStorage.getItem('idnyear') === '1';
+
+const L = () => UI[lang];
+const T = k => (lang === 'en' ? k : ((TERMS[k] || {})[lang] || k));
+const isNum = v => typeof v === 'number' && isFinite(v);
+const pct = v => isNum(v) ? Math.round(v*100) + '%' : '—';
+const num = v => isNum(v) ? Math.round(v) : '—';
+const money = v => isNum(v) ? '$' + Math.round(v).toLocaleString('en-US') : '—';
+const sum = (arr, k) => { const v = arr.map(r => r[k]).filter(isNum); return v.length ? v.reduce((a,b)=>a+b,0) : null; };
+const bar = (f, dim) => '<div class="barwrap"><span class="bar' + (dim ? ' dim' : '') +
+  '" style="width:' + (Math.max(0, Math.min(f, 1.2)) / 1.2 * 100) + '%"></span></div>';
+const pick = (block, month, dim) => ROWS
+  .filter(r => r.block === block && (month === undefined || r.month === month) && (dim === undefined || r.dim === dim))
+  .sort((a,b) => (a.order||0) - (b.order||0));
+const chipOf = (v0, t) => { if(v0 === null || !isNum(v0)) return ''; const v = Math.round(v0*100)/100; return '<span class="chip ' + (v >= 1 ? 'ok' : (v >= 0.9 ? 'near' : 'low')) + '">' +
+  (v >= 1 ? t.onplan : (v >= 0.9 ? t.nearplan : t.behind)) + '</span>'; };
+
+/* ---------- загрузка ---------- */
+function parseCSV(text){
+  const rows=[]; let row=[], cell='', q=false;
+  for(let i=0;i<text.length;i++){ const c=text[i];
+    if(q){ if(c==='"'&&text[i+1]==='"'){cell+='"';i++;} else if(c==='"'){q=false;} else cell+=c; }
+    else if(c==='"') q=true;
+    else if(c===',') { row.push(cell); cell=''; }
+    else if(c==='\n'){ row.push(cell); rows.push(row); row=[]; cell=''; }
+    else if(c!=='\r') cell+=c; }
+  if(cell.length||row.length){ row.push(cell); rows.push(row); }
+  return rows;
+}
+function numOf(v){
+  if(v === undefined || v === null || v === '') return null;
+  if(typeof v === 'number') return isFinite(v) ? v : null;
+  const s = String(v).trim();
+  if(/^-?[\d\s.,]+%$/.test(s)){ const x = Number(s.replace('%','').replace(/\s/g,'').replace(',','.')); return isNaN(x) ? null : x/100; }
+  const x = Number(s.replace(/[\s$]/g,'').replace(',','.'));
+  return isNaN(x) ? null : x;
+}
+function rowsFromCsv(text){
+  const table = parseCSV(text);
+  const head = (table[0] || []).map(h => h.replace(/^\uFEFF/, '').trim());
+  const at = name => head.indexOf(name);
+  if(at('block') < 0) throw new Error('No "block" column in the export');
+  return table.slice(1).filter(r => r[at('block')]).map(r => ({
+    year:numOf(r[at('year')]), month:numOf(r[at('month')]),
+    block:r[at('block')], key:r[at('key')]||'', dim:r[at('dim')]||'',
+    plan:numOf(r[at('plan')]), fact:numOf(r[at('fact')]),
+    extra:numOf(r[at('extra')]), order:numOf(r[at('order')])
+  }));
+}
+function loadGviz(timeoutMs){
+  return new Promise((resolve, reject) => {
+    const cb = '__dash_cb_' + Math.random().toString(36).slice(2);
+    const el = document.createElement('script'); let done = false;
+    const finish = (fn, arg) => { if(done) return; done = true; clearTimeout(tm);
+      try { delete window[cb]; } catch(_){ window[cb] = undefined; }
+      if(el.parentNode) el.parentNode.removeChild(el); fn(arg); };
+    const tm = setTimeout(() => finish(reject, new Error('TIMEOUT')), timeoutMs);
+    window[cb] = data => finish(resolve, data);
+    el.onerror = () => finish(reject, new Error('NO_ACCESS'));
+    el.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json;responseHandler:' + cb +
+             '&sheet=' + encodeURIComponent(SHEET_TAB) + '&headers=1&t=' + Date.now();
+    document.head.appendChild(el);
+  });
+}
+function rowsFromGviz(data){
+  if(!data || data.status === 'error' || !data.table) throw new Error('gviz error');
+  const cols = (data.table.cols || []).map(c => String(c.label || c.id || '').trim());
+  const at = name => cols.indexOf(name);
+  const cell = (r, i) => (i < 0 || !r.c || !r.c[i]) ? null : r.c[i].v;
+  return (data.table.rows || []).filter(r => cell(r, at('block'))).map(r => ({
+    year:numOf(cell(r,at('year'))), month:numOf(cell(r,at('month'))), block:String(cell(r,at('block'))),
+    key:cell(r,at('key'))===null?'':String(cell(r,at('key'))), dim:cell(r,at('dim'))===null?'':String(cell(r,at('dim'))),
+    plan:numOf(cell(r,at('plan'))), fact:numOf(cell(r,at('fact'))), extra:numOf(cell(r,at('extra'))), order:numOf(cell(r,at('order')))
+  }));
+}
+async function load(){
+  let rows = null; const why = [];
+  try {
+    const txt = await Promise.race([
+      fetch(CSV_URL + (CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now(), {cache:'no-store'})
+        .then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }),
+      new Promise((_, rj) => setTimeout(() => rj(new Error('no response in 20 s')), 20000))
+    ]);
+    rows = rowsFromCsv(txt);
+  } catch(e){ why.push('CSV: ' + (e.message || e.name)); }
+  if(!rows){
+    try { rows = rowsFromGviz(await loadGviz(10000)); }
+    catch(e){ why.push('gviz: ' + (e.message || e.name)); }
+  }
+  if(!rows) throw new Error('Data not loaded. ' + why.join(' · '));
+  if(!rows.length) throw new Error('The ' + SHEET_TAB + ' tab has no rows');
+  ROWS = rows;
+}
+
+/* ---------- графики ---------- */
+function lineChart(el, pts, sel){
+  const W=760, H=190, Lp=32, R=14, Tp=28, B=26;
+  const vals = pts.flatMap(p => [p.fact, p.fc, p.plan].filter(isNum));
+  if(!vals.length){ el.innerHTML=''; return; }
+  const max = Math.max(...vals)*1.16;
+  const x = i => Lp + i*(W-Lp-R)/Math.max(pts.length-1,1);
+  const y = v => H-B - v/max*(H-Tp-B);
+  const segs = key => { const out=[]; let cur=[];
+    pts.forEach((p,i)=>{ if(isNum(p[key])) cur.push([x(i), y(p[key])]); else { if(cur.length>1) out.push(cur); cur=[]; } });
+    if(cur.length>1) out.push(cur); return out; };
+  const defs = '<defs><linearGradient id="lcStroke" x1="0" y1="0" x2="1" y2="0">' +
+    '<stop offset="0%" stop-color="var(--accent)"/><stop offset="100%" stop-color="var(--accent-2)"/></linearGradient>' +
+    '<linearGradient id="lcArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity="0.28"/>' +
+    '<stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>';
+  let g='';
+  for(let k=0;k<=3;k++){ const v=max/1.16*k/3, yy=y(v);
+    g += '<line class="grid" x1="'+Lp+'" y1="'+yy+'" x2="'+(W-R)+'" y2="'+yy+'"/>' +
+         '<text class="axis" x="'+(Lp-8)+'" y="'+(yy+3.5)+'" text-anchor="end">'+Math.round(v)+'</text>'; }
+  let area='';
+  segs('fact').forEach(sg => { area += '<path class="area" d="M'+sg[0][0]+','+(H-B)+' L'+sg.map(p=>p[0]+','+p[1]).join(' L')+' L'+sg[sg.length-1][0]+','+(H-B)+' Z"/>'; });
+  let lines='';
+  segs('plan').forEach(sg => lines += '<polyline class="ln pl" points="'+sg.map(p=>p.join(',')).join(' ')+'"/>');
+  segs('fact').forEach(sg => lines += '<polyline class="ln" points="'+sg.map(p=>p.join(',')).join(' ')+'"/>');
+  segs('fc').forEach(sg   => lines += '<polyline class="ln fc" points="'+sg.map(p=>p.join(',')).join(' ')+'"/>');
+  let dots='', labels='';
+  pts.forEach((p,i)=>{
+    if(isNum(p.plan)) labels += '<text class="pv" x="'+x(i)+'" y="'+(y(p.plan)+13)+'">'+Math.round(p.plan)+'</text>';
+    const v = isNum(p.showv) ? p.showv : null;
+    if(v===null) return;
+    const on = p.m === sel;
+    dots  += '<circle class="dot'+(on?' on':'')+'" cx="'+x(i)+'" cy="'+y(v)+'" r="'+(on?5:3.4)+'"/>';
+    labels += '<text class="val'+(on?' on':'')+'" x="'+x(i)+'" y="'+(y(v)-(on?14:11))+'">'+Math.round(v)+'</text>';
+  });
+  const xl = pts.map((p,i)=>'<text class="xl'+(p.m===sel?' on':'')+'" x="'+x(i)+'" y="'+(H-B+16)+'">'+p.label+'</text>').join('');
+  el.innerHTML = '<svg class="lc" viewBox="0 0 '+W+' '+H+'" role="img">'+defs+g+area+lines+dots+labels+xl+'</svg>';
+}
+function chartPair(el, items, sel){
+  const all = items.flatMap(i => [i.a, i.b].filter(isNum));
+  if(!all.length){ el.innerHTML = ''; return; }
+  const max = Math.max(...all) * 1.18;
+  el.innerHTML = items.map(i => {
+    const on = i.m === sel;
+    const col = (v, cls) => '<span class="pb ' + cls + '" style="height:' + (isNum(v) ? Math.max(v/max*100, 2) : 0) + '%"></span>';
+    return '<div class="pcol' + (on ? ' sel' : '') + '">' +
+      '<span class="pv">' + (isNum(i.a) ? money(i.a) : '') + '</span>' +
+      '<span class="pv b">' + (isNum(i.b) ? money(i.b) : '') + '</span>' +
+      '<span class="pbars">' + col(i.a,'a') + col(i.b,'b') + '</span><u>' + i.label + '</u></div>';
+  }).join('');
+}
+function spark(el, vals){
+  if(vals.length < 2){ el.innerHTML = ''; return; }
+  const W = 160, H = 34, mn = Math.min(...vals), mx = Math.max(...vals), rng = (mx - mn) || 1;
+  const px = i => i * W / (vals.length - 1), py = v => H - 3 - (v - mn) / rng * (H - 8);
+  const pts = vals.map((v,i) => px(i) + ',' + py(v)).join(' '), last = vals.length - 1;
+  el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
+    '<defs><linearGradient id="spGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity=".30"/>' +
+    '<stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>' +
+    '<path class="sa" d="M0,' + H + ' L' + pts.split(' ').join(' L') + ' L' + W + ',' + H + ' Z"/>' +
+    '<polyline class="sl" points="' + pts + '"/><circle class="sd" cx="' + px(last) + '" cy="' + py(vals[last]) + '" r="2.6"/></svg>';
+}
+
+/* ---------- блоки ---------- */
+function funnel(id, rows){
+  const t = L(), tb = document.querySelector('#' + id + ' tbody');
+  if(!rows.length){ tb.innerHTML = '<tr><td colspan="6" class="empty">' + t.nodata + '</td></tr>'; return; }
+  const top = rows[0].fact;
+  tb.innerHTML = rows.map((r,i) => {
+    const prev = i > 0 ? rows[i-1].fact : null;
+    const conv = i === 0 ? (isNum(r.fact) ? 1 : null) : (isNum(r.fact) && prev) ? r.fact/prev : null;
+    const cum  = (isNum(r.fact) && top) ? r.fact/top : null;
+    return '<tr><td>' + T(r.key) + '</td><td class="n">' + (r.plan ? num(r.plan) : '—') + '</td><td class="n">' + num(r.fact) +
+      '</td><td class="n">' + pct(conv) + '</td><td class="n">' + pct(cum) + '</td><td>' +
+      (cum === null ? '' : bar(cum)) + '</td></tr>';
+  }).join('');
+}
+function mxbar(v){
+  const w = Math.max(0, Math.min(isNum(v) ? v : 0, 1)) * 100;
+  return '<span class="mxb' + (isNum(v) && v >= 1 ? ' full' : '') + '"><i style="width:' + w + '%"></i></span>';
+}
+function matrix(tableEl, head, total, rows, months, cellFn, totalFn, t){
+  tableEl.className = 'mx';
+  tableEl.innerHTML = '<thead><tr><th>' + head + '</th>' +
+    months.map(mo => '<th>' + t.short[mo-1] + '</th>').join('') + '<th class="last">' + total + '</th></tr></thead><tbody>' +
+    rows.map(row => '<tr><td>' + row.label + '</td>' + months.map(mo => cellFn(row, mo)).join('') + totalFn(row) + '</tr>').join('') +
+    '</tbody>';
+}
+
+// последний месяц, по которому в таблице уже есть факт найма
+function activeMonth(){
+  const ms = ROWS.filter(r => r.block === 'hiring' && isNum(r.fact)).map(r => r.month);
+  return ms.length ? Math.max(...ms) : 12;
+}
+// сумма по месяцам с января по текущий
+function agg(block, dim, upTo){
+  const by = new Map();
+  pick(block, undefined, dim).filter(r => r.month <= upTo).forEach(r => {
+    const k = r.key + '||' + r.dim;
+    const cur = by.get(k) || {block:r.block, key:r.key, dim:r.dim, order:r.order, plan:null, fact:null};
+    if(isNum(r.plan)) cur.plan = (cur.plan||0) + r.plan;
+    if(isNum(r.fact)) cur.fact = (cur.fact||0) + r.fact;
+    by.set(k, cur);
+  });
+  return [...by.values()].sort((a,b) => (a.order||0) - (b.order||0));
+}
+const costVal = (mo, d, k) => (pick('cost', mo, d).find(r => r.key === k) || {}).fact;
+const costMonths = () => [...new Set(pick('cost').filter(r => r.key === 'hire' && r.dim === 'Total' && isNum(r.fact)).map(r => r.month))].sort((a,b)=>a-b);
+const costYear = (d, k) => {   // стоимость за год = расход за год / люди за год
+  const ms = costMonths();
+  const spend = ms.map(mo => costVal(mo, d, 'spend')).filter(isNum).reduce((a,b)=>a+b,0);
+  const ppl = ms.map(mo => costVal(mo, d, k)).filter(isNum).reduce((a,b)=>a+b,0);
+  return ppl ? spend/ppl : null;
+};
+
+/* ---------- оболочка ---------- */
+function applyChrome(){
+  document.body.setAttribute('data-theme', theme);
+  document.documentElement.lang = lang;
+  const t = L(), set = (id,v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  set('g_hint',UI.en.hint); set('go',UI.en.ok); set('l_upd',t.upd);
+  ['z2','z3','z5','z6'].forEach(z => set(z, t[z])); set('z1', yearMode ? t.z1y : t.z1);
+  set('c_tcm',t.tcm); set('c_tut',t.tut); set('c_hiring',t.hiring); set('c_fc',t.fc); set('c_cost',t.cost);
+  set('l_k1',t.k1); set('l_k2',t.k2); set('l_k3',t.k3); set('l_k5',t.k5); set('l_k5a',t.unit);
+  set('h_month',t.month); set('h_forecast',t.fcfact); set('h_done2',t.done);
+  set('lg_fact',t.lgfact); set('lg_fc',t.lgfc); set('lg_plan',t.lgplan);
+  set('n_fc',t.nfc); set('n_cph',t.ncph); set('n_fun',t.nfun);
+  set('foot', 'Algonova · ' + t.foot + '   ·   ' + BUILD);
+  document.querySelectorAll('.h_plan').forEach(e => e.textContent = t.plan);
+  document.querySelectorAll('.h_fact').forEach(e => e.textContent = t.fact);
+  document.querySelectorAll('.h_stage').forEach(e => e.textContent = t.stage);
+  document.querySelectorAll('.h_conv').forEach(e => e.textContent = t.conv);
+  document.querySelectorAll('.h_fromcv').forEach(e => e.textContent = t.fromcv);
+  document.getElementById('hidezero').textContent = hideZero ? t.showall : t.hide;
+  const yb = document.getElementById('yearbtn');
+  yb.textContent = t.year; yb.className = 'btn seg' + (yearMode ? ' on' : '');
+  document.getElementById('lang').value = lang;
+}
+
+function boot(){
+  const gate = document.getElementById('gate'), app = document.getElementById('app');
+  gate.hidden = true; app.hidden = false;
+  applyChrome();
+  document.getElementById('upd').textContent = new Date().toLocaleString(
+    lang === 'ru' ? 'ru-RU' : (lang === 'id' ? 'id-ID' : 'en-GB'), {dateStyle:'short', timeStyle:'short'});
+
+  const months = [...new Set(pick('hiring').map(r => r.month))].filter(Boolean).sort((a,b) => a-b);
+  const sel = document.getElementById('month'), cur = +sel.value;
+  sel.innerHTML = months.map(m => '<option value="' + m + '">' + L().months[m-1] + '</option>').join('');
+  const AM = activeMonth();
+  sel.value = (cur && months.includes(cur)) ? cur : (months.includes(AM) ? AM : months[months.length-1]);
+  sel.disabled = yearMode; sel.style.opacity = yearMode ? '.45' : '';
+
+  const dsel = document.getElementById('dir');
+  const dims = [...new Set(pick('funnel_tutor').map(r => r.dim))].filter(Boolean);
+  const curD = dsel.selectedOptions.length ? dsel.selectedOptions[0].dataset.raw : null;
+  dsel.innerHTML = dims.map(d => '<option data-raw="' + d + '">' + T(d) + '</option>').join('');
+  const di = dims.indexOf(curD); if(di >= 0) dsel.selectedIndex = di;
+
+  sel.onchange = render; dsel.onchange = render;
+  render();
+}
+
+function render(){
+  const t = L(), m = +document.getElementById('month').value, isYear = yearMode, AM = activeMonth();
+  const dsel = document.getElementById('dir');
+  const dir = dsel.selectedOptions.length ? dsel.selectedOptions[0].dataset.raw : undefined;
+  const rowsFor = (block, dim) => isYear ? agg(block, dim, AM) : pick(block, m, dim);
+
+  /* --- сводка --- */
+  const hire = rowsFor('hiring');
+  const tcm = hire.find(r => r.key === TCM_ROLE) || {};
+  document.getElementById('k1').textContent = num(tcm.fact);
+  const d1 = document.getElementById('d1');
+  if(isNum(tcm.fact) && tcm.plan){
+    const v = Math.round(tcm.fact / tcm.plan * 100) / 100;
+    d1.className = v >= 1 ? 'good' : (v < 0.9 ? 'warn' : '');
+    d1.textContent = (v >= 1 ? '\u2191 ' : '\u2193 ') + pct(v) + ' ' + t.toplan + ' · ' + t.planw + ' ' + num(tcm.plan);
+  } else { d1.className = ''; d1.textContent = isNum(tcm.plan) && tcm.plan ? t.planw + ' ' + num(tcm.plan) : ''; }
+  const tcmHist = [];
+  for(let mo = 1; mo <= AM; mo++){ const r = pick('hiring', mo).find(x => x.key === TCM_ROLE); if(r && isNum(r.fact)) tcmHist.push(r.fact); }
+  spark(document.getElementById('sp1'), tcmHist);
+
+  const pAll = sum(hire, 'plan'), fAll = sum(hire, 'fact');
+  document.getElementById('k2').textContent = num(pAll);
+  document.getElementById('k3').textContent = num(fAll);
+  const d3 = document.getElementById('d3');
+  if(isNum(fAll) && pAll){ const v = Math.round(fAll/pAll*100)/100; d3.className = v >= 1 ? 'good' : (v < 0.9 ? 'warn' : '');
+    d3.textContent = (v >= 1 ? '\u2191 ' : '\u2193 ') + pct(v) + ' ' + t.toplan; }
+  else { d3.className = ''; d3.textContent = ''; }
+
+  const k4 = document.getElementById('k4'), d4 = document.getElementById('d4'), l4 = document.getElementById('l_k4');
+  if(isYear){
+    l4.textContent = t.k4y;
+    const v = (isNum(tcm.fact) && tcm.plan) ? tcm.fact / tcm.plan : null;
+    k4.textContent = pct(v); d4.innerHTML = v === null ? '' : chipOf(v, t).replace('margin-left:8px','');
+  } else {
+    l4.textContent = t.k4;
+    const fr = pick('forecast', m)[0];
+    if(!fr){ k4.textContent = '—'; d4.innerHTML = '<span class="empty">' + t.k4none + '</span>'; }
+    else if(fr.dim === 'future' && !(fr.fact > 0)){ k4.textContent = '—'; d4.innerHTML = '<span class="empty">' + t.k4nodata + '</span>'; }
+    else {
+      k4.textContent = num(fr.fact);
+      const v = fr.plan ? fr.fact / fr.plan : null;
+      d4.innerHTML = '<span class="empty">' + (fr.dim === 'done' ? t.k4done : t.k4cur) + ' · ' + t.planw + ' ' + num(fr.plan) + '</span>' + chipOf(v, t);
+    }
+  }
+
+  const cms = costMonths();
+  const costM = isYear ? null : (cms.includes(m) ? m : (cms.filter(x => x < m).pop() || null));
+  const costStale = !isYear && costM !== null && costM !== m;
+  const cphOf = d => isYear ? costYear(d, 'hires') : (costM === null ? null : costVal(costM, d, 'hire'));
+  document.getElementById('l_k5').textContent = t.k5 + (costStale ? ' · ' + t.months[costM-1] : (isYear ? ' · ' + t.totalw : ''));
+  document.getElementById('k5a').textContent = money(cphOf('Total'));
+  document.getElementById('k5b').textContent = money(cphOf('TCM'));
+  document.getElementById('k5c').textContent = money(cphOf('Tutors'));
+
+  document.getElementById('sumnote').textContent = isYear ? t.sumYear : t.sumMonth + (m === AM ? t.sumCur : '');
+
+  /* --- найм по ролям --- */
+  const hpTable = document.getElementById('hp'), hpNote = document.getElementById('n_hp');
+  const empty = r => !(isNum(r.plan) && r.plan > 0) && !(isNum(r.fact) && r.fact > 0);
+  if(isYear){
+    const mos = []; for(let mo = 1; mo <= AM; mo++) mos.push(mo);
+    const names = [...new Set(pick('hiring').map(r => r.key))];
+    const data = names.map(k => { const cells = {}; pick('hiring', undefined).filter(r => r.key === k).forEach(r => cells[r.month] = r);
+      return {label:T(k), key:k, cells:cells}; });
+    const shown = hideZero ? data.filter(r => mos.some(mo => !empty(r.cells[mo] || {}))) : data;
+    matrix(hpTable, t.role, t.totalw, shown, mos, (row, mo) => {
+      const c = row.cells[mo] || {};
+      if(empty(c)) return '<td class="c none">·</td>';
+      const hasPlan = isNum(c.plan) && c.plan > 0, v = hasPlan ? c.fact/c.plan : null;
+      return '<td class="c"><b' + (v !== null && v >= 1 ? ' class="hit"' : '') + '>' + (hasPlan ? pct(v) : num(c.fact)) + '</b>' +
+             (hasPlan ? mxbar(v) : '') + '<i>' + num(c.fact) + ' ' + t.outof + ' ' + (hasPlan ? c.plan : '—') + '</i></td>';
+    }, row => {
+      let p = 0, f = 0; mos.forEach(mo => { const c = row.cells[mo] || {}; if(isNum(c.plan)) p += c.plan; if(isNum(c.fact)) f += c.fact; });
+      const v = p ? f/p : null;
+      return '<td class="c last"><b' + (v !== null && v >= 1 ? ' class="hit"' : '') + '>' + (p ? pct(v) : (f || '—')) + '</b>' +
+             (p ? mxbar(v) : '') + '<i>' + f + ' ' + t.outof + ' ' + (p || '—') + '</i></td>';
+    }, t);
+    hpNote.innerHTML = '<span class="mxlegend"><span>' + t.mxnote + '</span>' +
+      '<span><b style="background:linear-gradient(90deg,var(--accent),var(--accent-2))"></b>' + t.lgfull + '</span>' +
+      '<span><b style="background:linear-gradient(90deg,var(--fill),var(--accent))"></b>' + t.lgpart + '</span>' +
+      (hideZero && data.length !== shown.length ? '<span>' + t.hidden + (data.length - shown.length) + '</span>' : '') + '</span>';
+  } else {
+    hpTable.className = '';
+    const hp = hideZero ? hire.filter(r => !empty(r)) : hire;
+    hpTable.innerHTML = '<thead><tr><th>' + t.role + '</th><th class="n">' + t.plan + '</th><th class="n">' + t.fact +
+      '</th><th style="width:150px">' + t.done + '</th></tr></thead><tbody>' +
+      (hp.length ? hp.map(r => {
+        const v = (r.plan && isNum(r.fact)) ? r.fact/r.plan : null;
+        const cell = v === null ? '<span class="empty">' + (r.plan ? '' : t.noplan) + '</span>'
+          : '<div class="stage">' + bar(v) + '<span class="' + (v>=1?'good':(v<0.5?'warn':'')) +
+            '" style="width:38px;text-align:right">' + pct(v) + '</span></div>';
+        return '<tr><td>' + T(r.key) + '</td><td class="n">' + num(r.plan) + '</td><td class="n">' + num(r.fact) + '</td><td>' + cell + '</td></tr>';
+      }).join('') : '<tr><td colspan="4" class="empty">' + t.nodata + '</td></tr>') + '</tbody>';
+    hpNote.textContent = (hire.length - hp.length) ? t.hidden + (hire.length - hp.length) : '';
+  }
+
+  /* --- воронки --- */
+  funnel('ftcm', rowsFor('funnel_tcm'));
+  funnel('ftut', rowsFor('funnel_tutor', dir));
+
+  /* --- прогноз TCM --- */
+  const fcRows = pick('forecast').sort((a,b) => a.month - b.month);
+  const val = r => (r.dim === 'future' && !(r.fact > 0)) ? null : r.fact;
+  const pts = fcRows.map(r => ({ m:r.month, label:t.short[r.month-1], plan: r.plan > 0 ? r.plan : null,
+    fact: r.dim === 'done' ? r.fact : null, fc: r.dim === 'done' ? null : val(r), showv: val(r) }));
+  for(let i=1;i<pts.length;i++) if(isNum(pts[i].fc) && !isNum(pts[i-1].fc) && isNum(pts[i-1].fact)) pts[i-1].fc = pts[i-1].fact;
+  lineChart(document.getElementById('ch_line'), pts, isYear ? -1 : m);
+  const leadFc = document.getElementById('lead_fc');
+  if(isYear){
+    const done = fcRows.filter(r => r.month <= AM);
+    const f = done.reduce((a,r) => a + (isNum(val(r)) ? val(r) : 0), 0), p = done.reduce((a,r) => a + (r.plan||0), 0);
+    leadFc.innerHTML = done.length ? t.leadfcY + '<b>' + num(f) + '</b>' + t.leadfc2 + '<b>' + num(p) + '</b>' : '';
+  } else {
+    const fr = fcRows.find(r => r.month === m);
+    leadFc.innerHTML = (fr && isNum(val(fr))) ? t.months[m-1] + (fr.dim === 'done' ? t.leadfc1d : t.leadfc1) +
+      '<b>' + num(val(fr)) + '</b>' + t.leadfc2 + '<b>' + num(fr.plan) + '</b>' : '';
+  }
+  document.querySelector('#fc tbody').innerHTML = fcRows.length ? fcRows.map(r => {
+    const v0 = val(r), v = (isNum(v0) && r.plan) ? v0/r.plan : null;
+    const src = r.dim === 'done' ? t.srcFact : (v0 === null ? t.srcNone : t.srcFc);
+    return '<tr><td>' + t.months[r.month-1] + '<span class="src">' + src + '</span>' + chipOf(v, t) +
+      '</td><td class="n">' + (r.plan ? num(r.plan) : '—') + '</td><td class="n">' + num(v0) +
+      '</td><td class="n ' + (v !== null && v >= 1 ? 'good' : (v !== null && v < 0.9 ? 'warn' : '')) + '">' + pct(v) +
+      '</td><td>' + (v === null ? '' : bar(v, !isYear && r.month !== m)) + '</td></tr>';
+  }).join('') : '<tr><td colspan="5" class="empty">' + t.nodata + '</td></tr>';
+
+  /* --- стоимость --- */
+  const costTable = document.getElementById('cost'), chEl = document.getElementById('ch_cph');
+  const leadCost = document.getElementById('lead_cost'), nCost = document.getElementById('n_cost');
+  chartPair(chEl, cms.map(mo => ({m:mo, label:t.short[mo-1], a:costVal(mo,'TCM','hire'), b:costVal(mo,'Tutors','hire')})), isYear ? -1 : costM);
+  if(!cms.length){
+    chEl.innerHTML = '<div class="empty" style="align-self:center">' + t.nocost + '</div>';
+    costTable.className = ''; costTable.innerHTML = ''; leadCost.innerHTML = ''; nCost.textContent = t.ncost;
+  } else if(isYear){
+    matrix(costTable, t.stream, t.totalw, STREAMS.map(d => ({label: d === 'Total' ? t.unit : d, dim:d})), cms, (row, mo) => {
+      const h = costVal(mo, row.dim, 'hire'), o = costVal(mo, row.dim, 'onboard');
+      if(!isNum(h) && !isNum(o)) return '<td class="c none">·</td>';
+      return '<td class="c"><b>' + money(h) + '</b>' + (isNum(o) ? '<i>' + t.cpoShort + ' ' + money(o) + '</i>' : '') + '</td>';
+    }, row => '<td class="c last"><b>' + money(costYear(row.dim, 'hires')) + '</b><i>' + t.yearcalc + '</i></td>', t);
+    leadCost.innerHTML = ''; nCost.textContent = t.cphYear + ' ' + t.ncost;
+  } else {
+    costTable.className = '';
+    const rows = costM === null ? [] : STREAMS.map(d => ({d:d, o:costVal(costM,d,'onboard'), h:costVal(costM,d,'hire')}))
+      .filter(r => isNum(r.o) || isNum(r.h));
+    const maxC = Math.max(...rows.map(r => isNum(r.h) ? r.h : 0), 0.0001);
+    costTable.innerHTML = '<thead><tr><th>' + t.stream + '</th><th class="n">' + t.cpo + '</th><th class="n">' + t.cphh +
+      '</th><th style="width:120px"></th></tr></thead><tbody>' +
+      (rows.length ? rows.map(r => '<tr' + (r.d === 'Total' ? ' class="total"' : '') + '><td>' + (r.d === 'Total' ? t.unit : r.d) +
+        '</td><td class="n">' + money(r.o) + '</td><td class="n">' + money(r.h) + '</td><td>' +
+        (isNum(r.h) ? bar(r.h/maxC*1.2, r.d === 'Total') : '') + '</td></tr>').join('')
+        : '<tr><td colspan="4" class="empty">' + t.nocost + '</td></tr>') + '</tbody>';
+    leadCost.innerHTML = costM === null ? '' : (costStale ? t.staleFrom + '<b>' + t.months[costM-1] + '</b>. ' : '') +
+      t.leadcost + '<b>' + money(costVal(costM,'TCM','hire')) + '</b>' + t.leadcost2 + '<b>' + money(costVal(costM,'Tutors','hire')) + '</b>';
+    nCost.textContent = t.ncost;
+  }
+}
+
+/* ---------- вход и кнопки ---------- */
+async function enter(pw, silent){
+  const err = document.getElementById('err');
+  if(pw !== PASSWORD){ if(!silent) err.textContent = UI.en.wrong; sessionStorage.removeItem('idnpw'); return; }
+  const btn = document.getElementById('go');
+  err.textContent = UI.en.loading; btn.disabled = true; btn.style.opacity = '.6';
+  try { await load(); sessionStorage.setItem('idnpw', pw); err.textContent = ''; boot(); }
+  catch(e){ err.textContent = e.message; console.error(e); }
+  finally { btn.disabled = false; btn.style.opacity = ''; }
+}
+document.getElementById('lang').onchange = e => { lang = e.target.value; sessionStorage.setItem('idnlang', lang); boot(); };
+document.getElementById('hidezero').onclick = () => { hideZero = !hideZero; sessionStorage.setItem('idnhide', hideZero ? '1' : '0'); applyChrome(); render(); };
+document.getElementById('yearbtn').onclick = () => { yearMode = !yearMode; sessionStorage.setItem('idnyear', yearMode ? '1' : '0'); boot(); };
+document.getElementById('theme').onclick = () => { theme = theme === 'light' ? 'dark' : 'light'; sessionStorage.setItem('idntheme', theme); document.body.setAttribute('data-theme', theme); };
+document.getElementById('go').onclick = () => enter(document.getElementById('pw').value);
+document.getElementById('pw').addEventListener('keydown', e => { if(e.key === 'Enter') document.getElementById('go').click(); });
+document.getElementById('reload').onclick = async e => {
+  const b = e.currentTarget; b.disabled = true;
+  try { await load(); boot(); } catch(err){ document.getElementById('upd').textContent = err.message; }
+  finally { b.disabled = false; }
+};
+document.body.setAttribute('data-theme', theme);
+document.getElementById('g_hint').textContent = UI.en.hint;
+document.getElementById('go').textContent = UI.en.ok;
+if(sessionStorage.getItem('idnpw')) enter(sessionStorage.getItem('idnpw'), true);
+</script>
+</body>
+</html>

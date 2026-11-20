@@ -244,17 +244,14 @@
   .legend i.dash::before{height:0;border-top:1px dashed var(--mute);border-radius:0;width:15px}
   .legend i.solid::before{height:3px;border-radius:2px;background:var(--accent);width:15px}
   .legend i.fcast::before{height:0;border-top:2px dashed var(--accent);border-radius:0;width:15px}
-  :root{--s1:#5B1FD9;--s2:#9B6BF0;--s3:#C9B4F5}
-  body[data-theme="dark"]{--s1:#8B5CF6;--s2:#7DD3FC;--s3:#DDD6FE}
-  .mchart{display:flex;align-items:flex-end;gap:12px;height:230px;padding-top:28px;margin:6px 0 46px;
+    .mchart{display:flex;align-items:flex-end;gap:12px;height:230px;padding-top:28px;margin:6px 0 46px;
     border-bottom:1px solid var(--line)}
   .mcol{flex:1;position:relative;height:100%;display:flex;align-items:flex-end;justify-content:center}
   .mcol.sel::before{content:"";position:absolute;inset:-26px -6px -40px;border-radius:10px;background:var(--accent-soft)}
-  .mstack{position:relative;z-index:1;width:64%;max-width:46px;display:flex;flex-direction:column-reverse;
+  .mstack{position:relative;z-index:1;width:64%;max-width:46px;display:block;
     border-radius:6px 6px 2px 2px;overflow:hidden;transform-origin:bottom;animation:growUp .55s cubic-bezier(.22,1,.36,1) both}
-  .mcol.partial .mstack{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.22) 0 4px,transparent 4px 8px)}
-  .mseg{display:block;width:100%}
-  .mseg.s1{background:var(--s1)} .mseg.s2{background:var(--s2)} .mseg.s3{background:var(--s3)}
+  .mcol.partial .mstack{opacity:.55}
+  .mstack{background:linear-gradient(180deg,var(--accent) 0%,var(--fill) 100%)}
   .mtot{position:absolute;left:-4px;right:-4px;text-align:center;font-size:12px;font-weight:700;color:var(--fg);
     z-index:3;font-variant-numeric:tabular-nums}
   .mplan{position:absolute;left:10%;right:10%;height:0;border-top:2px dashed var(--fg-2);opacity:.7;z-index:2}
@@ -263,7 +260,7 @@
   .mcol u i{display:block;font-style:normal;font-size:10px;font-weight:500;color:var(--mute)}
   .mcol.sel u{color:var(--fg)}
   @keyframes growUp{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-  .legend i.s1::before{background:var(--s1)} .legend i.s2::before{background:var(--s2)} .legend i.s3::before{background:var(--s3)}
+  .legend i.fbar::before{background:linear-gradient(180deg,var(--accent),var(--fill))}
   .note{font-size:12px;color:var(--mute);margin-top:12px;line-height:1.5}
   footer{margin-top:34px;font-size:12px;color:var(--mute);border-top:1px solid var(--line);padding-top:14px}
   @media(max-width:960px){.g2{grid-template-columns:1fr}
@@ -287,7 +284,7 @@
     <button id="go"></button>
     <div class="err" id="err"></div>
   </div>
-  <div class="foot">ALGONOVA · INTERNAL ANALYTICS · BUILD V4</div>
+  <div class="foot">ALGONOVA · INTERNAL ANALYTICS · BUILD V5</div>
 </div>
 
 <div id="app" hidden>
@@ -328,17 +325,6 @@
   </div>
   <div class="note" id="sumnote"></div>
 
-  <div class="zone" id="z6"></div>
-  <section>
-    <div class="cap" id="c_fc"></div>
-    <div class="body chartbox">
-      <p class="lead" id="lead_fc"></p>
-      <div class="mchart" id="ch_month"></div>
-      <div class="legend"><i class="s1">TCM</i><i class="s2" id="lg_ism"></i><i class="s3" id="lg_tut"></i><i class="dash" id="lg_plan"></i></div>
-      <div class="note" id="n_fc"></div>
-    </div>
-  </section>
-
   <div class="zone" id="z3"></div>
   <section>
     <div class="cap" id="c_hiring"></div>
@@ -363,6 +349,17 @@
     </section>
   </div>
   <div class="note" id="n_fun"></div>
+
+  <div class="zone" id="z6"></div>
+  <section>
+    <div class="cap" id="c_fc"></div>
+    <div class="body chartbox">
+      <p class="lead" id="lead_fc"></p>
+      <div class="mchart" id="ch_month"></div>
+      <div class="legend"><i class="fbar" id="lg_fact"></i><i class="dash" id="lg_plan"></i></div>
+      <div class="note" id="n_fc"></div>
+    </div>
+  </section>
 
   <div class="zone" id="z5"></div>
   <section>
@@ -392,13 +389,13 @@ const SHEET_ID  = "1HPiMyBAWp69hKlZCfi_ZkzFPoqHKB7Ne1xNXFazdibc";
 const SHEET_TAB = "DASH_export";
 const CSV_URL   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXE0WM3nHC1Cj16H7HqSRqEVSBHV9E9FUdHngVXXff8GuDzJUhL8iBqPBaUSeupMrT5IIu9thGVa22/pub?gid=798141948&single=true&output=csv";
 const PASSWORD  = "indonesia2026";
-const BUILD     = "build v4 · 20.11.2026";
+const BUILD     = "build v5 · 20.11.2026";
 
 /* ============ дальше ничего менять не нужно ============ */
 
 const UI = {
  en:{hint:"Enter password",ok:"Log in",wrong:"Wrong password",loading:"Loading…",upd:"Updated:",
-  z1:"Month summary",mz6:"Hiring by month",mcap:"Plan vs fact, all roles",mism:"ISM and BM",mlead:"Since January: hired {f} against a plan of {p}",mpart:"* The month is still in progress.",mnfc:"Bar — hires from the Candidates tab, split by role. Dashed mark and the number under the month — plan from the Hiring plan tab.",kAll:"Hired this month",kAllY:"Hired since January",ofp:"{p} planned",kTut:"Tutors",fcl:"month-end forecast: ",np:"no plan",z1y:"Year summary",z2:"Recruitment funnels",z3:"Hiring by role",z5:"Cost per hire",z6:"TCM forecast",
+  z1:"Month summary",mz6:"Hiring by month",mcap:"Plan vs fact, all roles",mism:"ISM and BM",mlead:"Since January: hired {f} against a plan of {p}",mpart:"* The month is still in progress.",mnfc:"Bar — hires from the Candidates tab, all roles. Dashed mark and the number under the month — plan from the Hiring plan tab.",kAll:"Hired this month",kAllY:"Hired since January",ofp:"{p} planned",kTut:"Tutors",fcl:"month-end forecast: ",np:"no plan",z1y:"Year summary",z2:"Recruitment funnels",z3:"Hiring by role",z5:"Cost per hire",z6:"TCM forecast",
   tcm:"TCM funnel",tut:"Tutor funnel",hiring:"Plan vs fact by role",fc:"TCM plan completion: passed FE",cost:"Cost per hire by stream",
   k1:"TCM hired",k2:"Plan, all roles",k3:"Hired, all roles",k4:"TCM forecast for month end",k4y:"TCM plan completion for the year",
   k4done:"month result",k4cur:"forecast",k4none:"Forecast is kept from May",k4nodata:"No forecast inputs yet",
@@ -427,7 +424,7 @@ const UI = {
   months:["January","February","March","April","May","June","July","August","September","October","November","December"],
   short:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},
  id:{hint:"Masukkan kata sandi",ok:"Masuk",wrong:"Kata sandi salah",loading:"Memuat…",upd:"Diperbarui:",
-  z1:"Ringkasan bulan",mz6:"Rekrutmen per bulan",mcap:"Rencana vs fakta, semua posisi",mism:"ISM dan BM",mlead:"Sejak Januari: direkrut {f} dari rencana {p}",mpart:"* Bulan ini masih berjalan.",mnfc:"Batang — rekrutmen dari tab Candidates, dibagi per posisi. Garis putus-putus dan angka di bawah bulan — rencana dari tab Hiring plan.",kAll:"Direkrut bulan ini",kAllY:"Direkrut sejak Januari",ofp:"rencana {p}",kTut:"Tutor",fcl:"prakiraan akhir bulan: ",np:"tanpa rencana",z1y:"Ringkasan tahun",z2:"Corong rekrutmen",z3:"Rekrutmen per posisi",z5:"Biaya per rekrutmen",z6:"Prakiraan TCM",
+  z1:"Ringkasan bulan",mz6:"Rekrutmen per bulan",mcap:"Rencana vs fakta, semua posisi",mism:"ISM dan BM",mlead:"Sejak Januari: direkrut {f} dari rencana {p}",mpart:"* Bulan ini masih berjalan.",mnfc:"Batang — rekrutmen dari tab Candidates, semua posisi. Garis putus-putus dan angka di bawah bulan — rencana dari tab Hiring plan.",kAll:"Direkrut bulan ini",kAllY:"Direkrut sejak Januari",ofp:"rencana {p}",kTut:"Tutor",fcl:"prakiraan akhir bulan: ",np:"tanpa rencana",z1y:"Ringkasan tahun",z2:"Corong rekrutmen",z3:"Rekrutmen per posisi",z5:"Biaya per rekrutmen",z6:"Prakiraan TCM",
   tcm:"Corong TCM",tut:"Corong tutor",hiring:"Rencana vs fakta per posisi",fc:"Pencapaian rencana TCM: lulus FE",cost:"Biaya per rekrutmen per alur",
   k1:"TCM direkrut",k2:"Rencana, semua posisi",k3:"Direkrut, semua posisi",k4:"Prakiraan TCM akhir bulan",k4y:"Pencapaian rencana TCM setahun",
   k4done:"hasil bulan",k4cur:"prakiraan",k4none:"Prakiraan dimulai sejak Mei",k4nodata:"Belum ada data prakiraan",
@@ -456,7 +453,7 @@ const UI = {
   months:["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],
   short:["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"]},
  ru:{hint:"Введите пароль",ok:"Войти",wrong:"Неверный пароль",loading:"Загрузка…",upd:"Обновлено:",
-  z1:"Сводка за месяц",mz6:"Найм по месяцам",mcap:"План и факт найма, все роли",mism:"ISM и BM",mlead:"С начала года: нанято {f} при плане {p}",mpart:"* Месяц еще идет, цифра неполная.",mnfc:"Столбец — найм по листу Candidates с разбивкой по ролям. Пунктир и число под месяцем — план из листа Hiring plan.",kAll:"Нанято за месяц",kAllY:"Нанято с начала года",ofp:"план {p}",kTut:"Тьюторы",fcl:"прогноз на конец месяца: ",np:"нет плана",z1y:"Сводка за год",z2:"Воронки подбора",z3:"Найм по ролям",z5:"Стоимость найма",z6:"Прогноз TCM",
+  z1:"Сводка за месяц",mz6:"Найм по месяцам",mcap:"План и факт найма, все роли",mism:"ISM и BM",mlead:"С начала года: нанято {f} при плане {p}",mpart:"* Месяц еще идет, цифра неполная.",mnfc:"Столбец — найм по листу Candidates по всем ролям. Пунктир и число под месяцем — план из листа Hiring plan.",kAll:"Нанято за месяц",kAllY:"Нанято с начала года",ofp:"план {p}",kTut:"Тьюторы",fcl:"прогноз на конец месяца: ",np:"нет плана",z1y:"Сводка за год",z2:"Воронки подбора",z3:"Найм по ролям",z5:"Стоимость найма",z6:"Прогноз TCM",
   tcm:"Воронка TCM",tut:"Воронка тьюторов",hiring:"План и факт по ролям",fc:"Выполнение плана TCM: сдали FE",cost:"Стоимость найма по потокам",
   k1:"Нанято TCM",k2:"План по всем ролям",k3:"Нанято по всем ролям",k4:"Прогноз TCM на конец месяца",k4y:"Выполнение плана TCM за год",
   k4done:"итог месяца",k4cur:"прогноз",k4none:"Прогноз ведется с мая",k4nodata:"Вводных для прогноза пока нет",
@@ -711,7 +708,7 @@ function applyChrome(){
   set('c_tcm',t.tcm); set('c_tut',t.tut); set('c_hiring',t.hiring); set('c_fc',t.mcap); set('c_cost',t.cost);
   set('l_k5',t.k5); set('l_k5c',t.kTut); set('l_k5a',t.unit);
   
-  set('lg_plan',t.lgplan); set('lg_ism',t.mism); set('lg_tut',t.kTut);
+  set('lg_plan',t.lgplan); set('lg_fact',t.lgfact);
    set('n_cph',t.ncph); set('n_fun',t.nfun);
   set('foot', 'Algonova · ' + t.foot + '   ·   ' + BUILD);
   document.querySelectorAll('.h_plan').forEach(e => e.textContent = t.plan);
@@ -851,20 +848,19 @@ function render(){
   /* --- найм по месяцам --- */
   const mos = []; for(let mo = 1; mo <= AM; mo++) mos.push(mo);
   const data = mos.map(mo => {
-    const rs = pick('hiring', mo), g = f => sum(rs.filter(r => f(r.key)), 'fact') || 0;
-    const a = g(k => k === TCM_ROLE), b = g(k => k === 'Internal Sales Manager' || k === 'Booking Manager'), c = g(isTut);
-    return {mo, a, b, c, tot: a + b + c, plan: sum(rs, 'plan')};
+    const rs = pick('hiring', mo);
+    return {mo, tot: sum(rs, 'fact') || 0, plan: sum(rs, 'plan')};
   });
   const maxV = Math.max(...data.map(d => Math.max(d.tot, d.plan || 0)), 1) * 1.1;
   const chM = document.getElementById('ch_month');
   chM.className = 'mchart' + (isYear ? '' : ' has-sel');
   chM.innerHTML = data.map(d => {
-    const hgt = d.tot / maxV * 100, seg = (v, cls) => v ? '<span class="mseg ' + cls + '" style="height:' + (v / d.tot * 100) + '%"></span>' : '';
-    const tip = t.months[d.mo-1] + '\nTCM ' + d.a + ' · ' + t.mism + ' ' + d.b + ' · ' + t.kTut + ' ' + d.c + '\n' + t.plan + ' ' + num(d.plan);
+    const hgt = d.tot / maxV * 100;
+    const tip = t.months[d.mo-1] + ': ' + t.fact + ' ' + d.tot + ', ' + t.plan + ' ' + num(d.plan);
     return '<div class="mcol' + (!isYear && d.mo === m ? ' sel' : '') + (d.mo === AM ? ' partial' : '') + '" title="' + tip + '">' +
       '<span class="mtot" style="bottom:calc(' + Math.max(hgt, (d.plan || 0) / maxV * 100) + '% + 6px)">' + d.tot + (d.mo === AM ? '*' : '') + '</span>' +
       (isNum(d.plan) && d.plan ? '<span class="mplan" style="bottom:' + (d.plan / maxV * 100) + '%"></span>' : '') +
-      '<span class="mstack" style="height:' + Math.max(hgt, 0.5) + '%">' + seg(d.a,'s1') + seg(d.b,'s2') + seg(d.c,'s3') + '</span>' +
+      '<span class="mstack" style="height:' + Math.max(hgt, 0.5) + '%"></span>' +
       '<u>' + t.short[d.mo-1] + '<i>' + t.planw + ' ' + num(d.plan) + '</i></u></div>';
   }).join('');
   const fY = data.reduce((x, d) => x + d.tot, 0), pY = data.reduce((x, d) => x + (d.plan || 0), 0);
